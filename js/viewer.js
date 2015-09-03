@@ -2,40 +2,29 @@ var videoViewer = {
 	UI : {
 		playerTemplate : '<header><link href="'+OC.filePath('files_videosPlayer', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videosPlayer', 'videojs', 'src')+'/video.js"></script>' + '<script>' +
 		'_V_.options.flash.swf = "'+OC.filePath('files_videosPlayer', 'videojs', 'src')+'/video-js.swf"' +
-		'</script>' + '</head><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="854" height="480" poster="my_video_poster.png" data-setup="{}">' +
+		'</script>' + '</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="my_video_poster.png" data-setup="{}">' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {
-			$('<div id="videoviewer_overlay" style="display:none;"></div><div id="videoviewer_popup"><div id="videoviewer_container"><a class="box-close" id="box-close" href="#"></a></div></div>').appendTo('body');
+			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"><a class="box-close" id="box-close" href="#"></a></div></div></div></div>').appendTo('body');
 
-			$('#videoviewer_overlay').fadeIn('fast',function(){
-				$('#videoviewer_popup').fadeIn('fast');
+			$('#videoplayer_overlay').fadeIn('fast',function(){
+				$('#videoplayer_container').fadeIn('fast');
 			});
 			$('#box-close').click(videoViewer.hidePlayer);
-			var size = videoViewer.UI.getSize();
-			var playerView = videoViewer.UI.playerTemplate.replace(/%width%/g, size.width)
-								.replace(/%height%/g, size.height)
+			var playerView = videoViewer.UI.playerTemplate
 								.replace(/%type%/g, videoViewer.mime)
 								.replace(/%src%/g, videoViewer.location)
 			;
-			$(playerView).prependTo('#videoviewer_container');
+			$(playerView).prependTo('#videoplayer');
 		},
 		hide : function() {
-			$('#videoviewer_popup').fadeOut('fast', function() {
-				$('#videoviewer_overlay').fadeOut('fast', function() {
-					$('#videoviewer_popup').remove();
-					$('#videoviewer_overlay').remove();
+			$('#videoplayer_container').fadeOut('fast', function() {
+				$('#videoplayer_overlay').fadeOut('fast', function() {
+					$('#videoplayer_container').remove();
+					$('#videoplayer_overlay').remove();
 				});
 			});
-		},
-		getSize : function () {
-			var size;
-			if ($(document).width()>'680' && $(document).height()>'520' ){
-				size = {width: 640, height: 480};
-			} else {
-				size = {width: 320, height: 240};
-			}
-			return size;
 		}
 	},
 	mime : null,
