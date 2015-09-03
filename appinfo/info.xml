@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<info>
+	<id>files_videosPlayer</id>
+	<name>VideoJS</name>
+	<description>A video player using a themed version of Video.js.
+
+		Video.js: http://videojs.com/
+
+		Theme: https://github.com/cabin/videojs-sublime-skin
+
+		Based on this app: https://apps.owncloud.com/content/show.php/Video+Js?content=159670.
+	</description>
+	<version>0.9</version>
+	<licence>AGPL</licence>
+	<author>Björn Korella</author>
+        <shipped>true</shipped>
+	<require>8.1.1</require>
+</info>
