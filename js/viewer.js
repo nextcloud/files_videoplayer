@@ -6,24 +6,27 @@ var videoViewer = {
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {
+			// insert HTML
 			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"><a class="box-close" id="box-close" href="#"></a></div></div></div></div>').appendTo('body');
-
-			$('#videoplayer_overlay').fadeIn('fast',function(){
-				$('#videoplayer_container').fadeIn('fast');
-			});
-			$('#box-close').click(videoViewer.hidePlayer);
 			var playerView = videoViewer.UI.playerTemplate
 								.replace(/%type%/g, videoViewer.mime)
 								.replace(/%src%/g, videoViewer.location)
 			;
 			$(playerView).prependTo('#videoplayer');
+			// add event to close icon
+			$('#box-close').click(videoViewer.hidePlayer);
+			// add event to ESC key
+			$(document).keyup(function(e) {
+			  if (e.keyCode === 27) {
+			    videoViewer.hidePlayer();
+			  }
+			});
+			// show elements
+			$('#videoplayer_overlay').fadeIn('fast');
 		},
 		hide : function() {
-			$('#videoplayer_container').fadeOut('fast', function() {
-				$('#videoplayer_overlay').fadeOut('fast', function() {
-					$('#videoplayer_container').remove();
-					$('#videoplayer_overlay').remove();
-				});
+			$('#videoplayer_overlay').fadeOut('fast', function() {
+				$('#videoplayer_overlay').remove();
 			});
 		}
 	},
