@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <info>
-	<id>files_videosPlayer</id>
-	<name>VideoJS</name>
-	<description>A video player using a themed version of Video.js.
+	<id>files_videojs-sublime</id>
+	<name>VideoJS Sublime</name>
+	<description>A video player using a skinned version of Video.js
+
+		Based on this app: https://apps.owncloud.com/content/show.php/Video+Js?content=159670
 
 		Video.js: http://videojs.com/
 
-		Theme: https://github.com/cabin/videojs-sublime-skin
-
-		Based on this app: https://apps.owncloud.com/content/show.php/Video+Js?content=159670.
+		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
 	<version>0.9</version>
 	<licence>AGPL</licence>

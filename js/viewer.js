@@ -1,7 +1,7 @@
 var videoViewer = {
 	UI : {
-		playerTemplate : '<header><link href="'+OC.filePath('files_videosPlayer', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videosPlayer', 'videojs', 'src')+'/video.js"></script>' + '<script>' +
-		'_V_.options.flash.swf = "'+OC.filePath('files_videosPlayer', 'videojs', 'src')+'/video-js.swf"' +
+		playerTemplate : '<header><link href="'+OC.filePath('files_videojs-sublime', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videojs-sublime', 'videojs', 'src')+'/video.js"></script>' + '<script>' +
+		'_V_.options.flash.swf = "'+OC.filePath('files_videojs-sublime', 'videojs', 'src')+'/video-js.swf"' +
 		'</script>' + '</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="my_video_poster.png" data-setup="{}">' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
@@ -31,6 +31,9 @@ var videoViewer = {
 			});
 			// show elements
 			$('#videoplayer_overlay').fadeIn('fast');
+			// autoplay
+			var vjsPlayer = videojs("my_video_1");
+			vjsPlayer.play();
 		},
 		hide : function() {
 			$('#videoplayer_overlay').fadeOut('fast', function() {
