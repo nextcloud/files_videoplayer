@@ -15,6 +15,14 @@ var videoViewer = {
 			$(playerView).prependTo('#videoplayer');
 			// add event to close icon
 			$('#box-close').click(videoViewer.hidePlayer);
+			// add event to overlay
+			$("#videoplayer_overlay").on("click", function(e) {
+				if (e.target != this) {
+					return;
+				} else {
+					videoViewer.hidePlayer();
+				}
+			});
 			// add event to ESC key
 			$(document).keyup(function(e) {
 			  if (e.keyCode === 27) {
