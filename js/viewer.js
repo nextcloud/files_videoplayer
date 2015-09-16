@@ -2,7 +2,7 @@ var videoViewer = {
 	UI : {
 		playerTemplate : '<header><link href="'+OC.filePath('files_videojs-sublime', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videojs-sublime', 'videojs', 'src')+'/video.js"></script>' + '<script>' +
 		'_V_.options.flash.swf = "'+OC.filePath('files_videojs-sublime', 'videojs', 'src')+'/video-js.swf"' +
-		'</script>' + '</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="my_video_poster.png" data-setup="{}">' +
+		'</script>' + '</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videojs-sublime', '', 'img')+'/poster.png" data-setup="{}">' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {

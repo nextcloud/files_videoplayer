@@ -20,6 +20,7 @@ video {
 	width: 95%;
 	max-width: 854px;
 	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
 }
 
 #videoplayer_container {
