@@ -1,4 +1,4 @@
-# ownCloud Video.js
+# VideoJS Sublime
 ![](screenshot.jpg)
 
 A responsive video player for ownCloud using a skinned version of Video.js.
