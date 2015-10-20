@@ -10,9 +10,8 @@
 
 		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
-	<version>0.9</version>
+	<version>0.9.5</version>
 	<licence>AGPL</licence>
 	<author>Björn Korella</author>
-        <shipped>true</shipped>
 	<require>8.1.1</require>
 </info>
