@@ -7,7 +7,7 @@ var videoViewer = {
 		'</video>',
 		show : function () {
 			// insert HTML
-			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"><a class="box-close" id="box-close" href="#"></a></div></div></div></div>').appendTo('body');
+			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"><a class="icon-view-close" id="box-close" href="#"></a></div></div></div></div>').appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
 								.replace(/%type%/g, videoViewer.mime)
 								.replace(/%src%/g, videoViewer.location)

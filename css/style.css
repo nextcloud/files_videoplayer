@@ -48,14 +48,19 @@ video {
 	left: 0;
 }
 
-a.box-close {
+a.icon-view-close {
 	position: absolute;
-	top: -12px;
-	right: -12px;
+	top: 10px;
+	right: 10px;
 	width: 30px;
 	height: 30px;
+	opacity: .35;
 	cursor: pointer;
-	background: url('../img/close.png') no-repeat 0 0;
+	transition: opacity 0.5s, linear;
+}
+
+a.icon-view-close:hover {
+	opacity: .75;
 }
 
 
