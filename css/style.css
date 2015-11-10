@@ -8,8 +8,8 @@ video {
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	background-color: #777;
-	background-color: rgba(119,119,119, .7);
+	background-color: #4c4c4c;
+	background-color: rgba(0, 0, 0, .7);
 	z-index: 1000;
 }
 
@@ -30,7 +30,7 @@ video {
 	margin: 0 auto;
 	color: #4d4d4d;
 	background: #fff;
-	box-shadow: 0 0 20px #111;
+	box-shadow: 0 0 20px #222;
 	z-index: 1001;
 }
 
