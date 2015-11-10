@@ -52,10 +52,16 @@ var videoViewer = {
 		'video/ogg',
 		'video/quicktime',
 	],
-	onView : function(file) {
+	onView : function(file, data) {
 		videoViewer.file = file;
-		videoViewer.location = videoViewer.getMediaUrl(file);
-		videoViewer.mime = FileActions.getCurrentMimeType();
+		videoViewer.dir = data.dir;
+		if ($('#isPublic').length){
+			// No seek for public videos atm, sorry
+			videoViewer.location = data.fileList.getDownloadUrl(file, videoViewer.dir);
+		} else {
+			videoViewer.location = OC.linkToRemote('webdav') + OC.joinPaths(videoViewer.dir, file);
+		}
+		videoViewer.mime = data.$file.attr('data-mime');
 		videoViewer.showPlayer();
 	},
 	showPlayer : function() {
@@ -81,10 +87,8 @@ $(document).ready(function(){
 	if (typeof FileActions !== 'undefined') {
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
 			var mime = videoViewer.mimeTypes[i];
-                        console.log(mime);
-			FileActions.register(mime, 'View', OC.PERMISSION_READ, '', videoViewer.onView);
-			FileActions.setDefault(mime, 'View');
-
+			OCA.Files.fileActions.register(mime, 'View', OC.PERMISSION_READ, '', videoViewer.onView);
+			OCA.Files.fileActions.setDefault(mime, 'View');
 		}
 	}
 
