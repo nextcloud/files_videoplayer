@@ -10,7 +10,7 @@ video {
 	right: 0px;
 	background-color: #4c4c4c;
 	background-color: rgba(0, 0, 0, .7);
-	z-index: 1000;
+	z-index: 3000;
 }
 
 #videoplayer_outer_container {
@@ -31,7 +31,7 @@ video {
 	color: #4d4d4d;
 	background: #fff;
 	box-shadow: 0 0 20px #222;
-	z-index: 1001;
+	z-index: 3001;
 }
 
 #videoplayer_container:before {
