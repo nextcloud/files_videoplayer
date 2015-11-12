@@ -23,12 +23,6 @@ var videoViewer = {
 					videoViewer.hidePlayer();
 				}
 			});
-			// add event to ESC key
-			$(document).keyup(function(e) {
-			  if (e.keyCode === 27) {
-			    videoViewer.hidePlayer();
-			  }
-			});
 			// show elements
 			$('#videoplayer_overlay').fadeIn('fast');
 			// autoplay
@@ -83,6 +77,13 @@ var videoViewer = {
 };
 
 $(document).ready(function(){
+
+	// add event to ESC key
+	$(document).keyup(function(e) {
+		if (e.keyCode === 27) {
+			videoViewer.hidePlayer();
+		}
+	});
 
 	if (typeof FileActions !== 'undefined') {
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
