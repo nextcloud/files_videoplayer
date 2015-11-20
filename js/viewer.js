@@ -64,12 +64,7 @@ var videoViewer = {
 	hidePlayer : function() {
 		videoViewer.player = false;
 		delete videoViewer.player;
-
 		videoViewer.UI.hide();
-	},
-	getMediaUrl : function(file) {
-		var dir = $('#dir').val();
-		return fileDownloadPath(dir, file);
 	},
 	log : function(message){
 		console.log(message);
