@@ -29,7 +29,9 @@ var videoViewer = {
 			var vjsPlayer = videojs("my_video_1");
 			// show and hide close button with the rest of the UI
 			vjsPlayer.on('userinactive', function () {
-				$('#box-close').fadeOut(1000, "easeInOutExpo");
+				if (!$('#my_video_1').hasClass('vjs-paused')) {
+					$('#box-close').fadeOut(1000, "easeInOutExpo");
+				}
 			});
 			vjsPlayer.on('useractive', function () {
 				$('#box-close').fadeIn(100, "easeInOutExpo");
