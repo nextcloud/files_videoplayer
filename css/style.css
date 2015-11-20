@@ -56,7 +56,6 @@ a.icon-view-close {
 	height: 30px;
 	opacity: .35;
 	cursor: pointer;
-	transition: opacity 0.5s, linear;
 }
 
 a.icon-view-close:hover {
