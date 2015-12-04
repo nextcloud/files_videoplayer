@@ -7,14 +7,12 @@ var videoViewer = {
 		'</video>',
 		show : function () {
 			// insert HTML
-			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"><a class="icon-view-close" id="box-close" href="#"></a></div></div></div></div>').appendTo('body');
+			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>').appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
 								.replace(/%type%/g, videoViewer.mime)
 								.replace(/%src%/g, videoViewer.location)
 			;
 			$(playerView).prependTo('#videoplayer');
-			// add event to close icon
-			$('#box-close').click(videoViewer.hidePlayer);
 			// add event to overlay
 			$("#videoplayer_overlay").on("click", function(e) {
 				if (e.target != this) {
@@ -27,16 +25,11 @@ var videoViewer = {
 			$('#videoplayer_overlay').fadeIn('fast');
 			// autoplay
 			var vjsPlayer = videojs("my_video_1");
-			// show and hide close button with the rest of the UI
-			vjsPlayer.on('userinactive', function () {
-				if (!$('#my_video_1').hasClass('vjs-paused')) {
-					$('#box-close').fadeOut(1000, "easeInOutExpo");
-				}
-			});
-			vjsPlayer.on('useractive', function () {
-				$('#box-close').fadeIn(100, "easeInOutExpo");
-			});
 			vjsPlayer.play();
+			// append close button to video element
+			$("#my_video_1").append('<a class="icon-view-close" id="box-close" href="#"></a>');
+			// add event to close button
+			$('#box-close').click(videoViewer.hidePlayer);
 		},
 		hide : function() {
 			$('#videoplayer_overlay').fadeOut('fast', function() {

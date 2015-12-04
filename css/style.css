@@ -48,7 +48,7 @@ video {
 	left: 0;
 }
 
-a.icon-view-close {
+#box-close {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -58,8 +58,15 @@ a.icon-view-close {
 	cursor: pointer;
 }
 
-a.icon-view-close:hover {
+#box-close:hover {
 	opacity: .75;
+}
+
+.vjs-sublime-skin.vjs-has-started.vjs-user-inactive.vjs-playing #box-close {
+	opacity: 0;
+	-webkit-transition: opacity 1s cubic-bezier(.455,.03,.515,.955);
+	-moz-transition: opacity 1s cubic-bezier(.455,.03,.515,.955);
+	transition: opacity 1s cubic-bezier(.455,.03,.515,.955);
 }
 
 
