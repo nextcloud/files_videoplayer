@@ -91,6 +91,11 @@ video {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004c4c4c', endColorstr='#80131313',GradientType=0 ); /* IE6-9 */
 }
 
+/* hide error icon */
+.vjs-error .vjs-error-display::before {
+	content: "" !important;
+}
+
 
 /* Internet Explorer */
 

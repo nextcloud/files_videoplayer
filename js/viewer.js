@@ -23,13 +23,14 @@ var videoViewer = {
 			});
 			// show elements
 			$('#videoplayer_overlay').fadeIn('fast');
-			// autoplay
+			// initialize player
 			var vjsPlayer = videojs("my_video_1");
-			vjsPlayer.play();
 			// append close button to video element
 			$("#my_video_1").append('<a class="icon-view-close" id="box-close" href="#"></a>');
 			// add event to close button
 			$('#box-close').click(videoViewer.hidePlayer);
+			// autoplay
+			vjsPlayer.play();
 		},
 		hide : function() {
 			$('#videoplayer_overlay').fadeOut('fast', function() {
