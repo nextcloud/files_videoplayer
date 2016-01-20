@@ -13,5 +13,7 @@
 	<version>0.9.8</version>
 	<licence>AGPL</licence>
 	<author>Björn Korella</author>
-	<requiremin>8.2.2</requiremin>
+	<dependencies>
+	  <owncloud min-version="8.2" max-version="9.0" />
+	</dependencies>
 </info>
