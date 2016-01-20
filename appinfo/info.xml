@@ -13,5 +13,5 @@
 	<version>0.9.8</version>
 	<licence>AGPL</licence>
 	<author>Björn Korella</author>
-	<require>8.1.1</require>
+	<requiremin>8.2.2</requiremin>
 </info>
