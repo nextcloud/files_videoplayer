@@ -11,7 +11,7 @@
 		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
 	<version>0.9.8</version>
-	<licence>AGPL</licence>
+	<licence>MIT</licence>
 	<author>Björn Korella</author>
 	<dependencies>
 	  <owncloud min-version="8.2" max-version="9.0" />

@@ -14,4 +14,4 @@ Video.js: http://videojs.com/
 Video.js skin: https://github.com/cabin/videojs-sublime-skin
 
 ## License
-AGPL
+MIT
