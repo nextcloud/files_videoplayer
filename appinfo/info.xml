@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info>
-	<id>videojs-sublime</id>
-	<name>VideoJS Sublime</name>
+	<id>files_videoplayer</id>
+	<name>Video Player based on VideoJS Sublime</name>
 	<description>A responsive video player using a skinned version of Video.js
 
 		Based on this app: https://apps.owncloud.com/content/show.php/Video+Js?content=159670
