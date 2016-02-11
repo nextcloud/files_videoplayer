@@ -9,8 +9,8 @@ var videoViewer = {
 			// insert HTML
 			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>').appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
-								.replace(/%type%/g, videoViewer.mime)
-								.replace(/%src%/g, videoViewer.location)
+								.replace(/%type%/g, escapeHTML(videoViewer.mime))
+								.replace(/%src%/g, escapeHTML(videoViewer.location))
 			;
 			$(playerView).prependTo('#videoplayer');
 			// add event to overlay
