@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <info>
-	<id>files_videojs-sublime</id>
+	<id>videojs-sublime</id>
 	<name>VideoJS Sublime</name>
 	<description>A responsive video player using a skinned version of Video.js
 
