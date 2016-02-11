@@ -13,6 +13,7 @@
 	<version>0.9.8</version>
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
+	<default_enable/>
 	<dependencies>
 	  <owncloud min-version="8.2" max-version="9.0" />
 	</dependencies>
