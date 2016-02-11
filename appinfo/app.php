@@ -15,5 +15,5 @@
 *
 */
 
-OCP\Util::addStyle( 'videojs-sublime', 'style' );
-OCP\Util::addscript( 'videojs-sublime', 'viewer');
+OCP\Util::addStyle( 'files_videoplayer', 'style' );
+OCP\Util::addscript( 'files_videoplayer', 'viewer');
