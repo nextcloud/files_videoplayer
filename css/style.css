@@ -107,11 +107,6 @@ video {
 	transform: none;
 }
 
-.ie8 .vjs-control-bar,
-.ie8 .vjs-big-play-button {
-	display: none;
-}
-
 .ie9 .video-js {
 	width: 100% !important;
 	height: 100% !important;
