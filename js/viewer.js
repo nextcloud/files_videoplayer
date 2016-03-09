@@ -1,7 +1,7 @@
 var videoViewer = {
 	UI : {
 		playerTemplate : '<header><link href="'+OC.filePath('files_videoplayer', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videoplayer', 'videojs', 'src')+'/video.js"></script>' +
-		'</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup="{"techOrder": ["html5"]}">' +
+		'</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {
