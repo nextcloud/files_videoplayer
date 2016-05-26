@@ -69,7 +69,7 @@ var videoViewer = {
 		videoViewer.UI.hide();
 		// force close socket
 		$('video').each(function() {
-		    $($(this)[0]).attr('src', false);
+		    $($(this)[0]).attr('src', '');
 		});
 	},
 	log : function(message){
