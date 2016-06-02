@@ -14,6 +14,14 @@
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
 	<default_enable/>
+	<documentation>
+		<user>https://github.com/owncloud/files_videoplayer/blob/master/README.md</user>
+		<admin>https://github.com/owncloud/files_videoplayer/blob/master/README.md</admin>
+		<developer>https://github.com/owncloud/files_videoplayer/blob/master/README.md</developer>
+	</documentation>
+	<website>https://github.com/owncloud/files_videoplayer</website>
+	<bugs>https://github.com/owncloud/files_videoplayer/issues</bugs>
+	<repository type="git">https://github.com/owncloud/files_videoplayer.git</repository>
 	<dependencies>
 	  <owncloud min-version="8.2" max-version="9.1" />
 	</dependencies>
