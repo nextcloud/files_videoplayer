@@ -1,7 +1,7 @@
 # Video player
 ![](screenshot.jpg)
 
-A responsive video player for ownCloud using a skinned version of Video.js.
+A responsive video player for Nextcloud using a skinned version of Video.js.
 
 ## Installation
 Simply copy the contents of this repository to **$owncloud/apps/files_videoplayer** and enable the app.
