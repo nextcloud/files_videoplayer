@@ -33,13 +33,16 @@ var videoViewer = {
 			// show elements
 			$('#videoplayer_overlay').fadeIn('fast');
 			// initialize player
-			var vjsPlayer = videojs("my_video_1");
-			// append close button to video element
-			$("#my_video_1").append('<a class="icon-view-close" id="box-close" href="#"></a>');
-			// add event to close button
-			$('#box-close').click(videoViewer.hidePlayer);
-			// autoplay
-			vjsPlayer.play();
+			videojs("my_video_1").ready(function() {
+				videoViewer.player = this;
+				// append close button to video element
+				$("#my_video_1").append('<a class="icon-view-close" id="box-close" href="#"></a>');
+				// add event to close button
+				$('#box-close').click(videoViewer.hidePlayer);
+				// autoplay
+				videoViewer.player.play();
+			});
+
 		},
 		hide : function() {
 			$('#videoplayer_overlay').fadeOut('fast', function() {
@@ -76,13 +79,9 @@ var videoViewer = {
 		});
 	},
 	hidePlayer : function() {
+		videoViewer.player.dispose();
 		videoViewer.player = false;
-		delete videoViewer.player;
 		videoViewer.UI.hide();
-		// force close socket
-		$('video').each(function() {
-		    $($(this)[0]).attr('src', '');
-		});
 	},
 	log : function(message){
 		console.log(message);
