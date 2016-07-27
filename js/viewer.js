@@ -19,8 +19,12 @@ var videoViewer = {
 			// insert HTML
 			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>').appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
-								.replace(/%type%/g, escapeHTML(videoViewer.mime))
 								.replace(/%src%/g, escapeHTML(videoViewer.location));
+			if (videoViewer.mime) {
+				playerView = playerView.replace(/%type%/g, escapeHTML(videoViewer.mime));
+			} else {
+				playerView = playerView.replace(/type="%type%"/g, '');
+			}
 			$(playerView).prependTo('#videoplayer');
 			// add event to overlay
 			$("#videoplayer_overlay").on("click", function(e) {
@@ -60,7 +64,11 @@ var videoViewer = {
 		'video/x-flv',
 		'video/ogg',
 		'video/quicktime',
+		'video/x-matroska',
 	],
+	mimeTypeAliasses: {
+		'video/x-matroska': 'video/webm' // chrome is a little kid that refuses to play mkv if it knows it's an mkv, webm uses the same container format
+	},
 	onView : function(file, data) {
 		videoViewer.file = file;
 		videoViewer.dir = data.dir;
@@ -71,6 +79,9 @@ var videoViewer = {
 			videoViewer.location = OC.linkToRemote('webdav') + OC.joinPaths(videoViewer.dir, file);
 		}
 		videoViewer.mime = data.$file.attr('data-mime');
+		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
+			videoViewer.mime = videoViewer.mimeTypeAliasses[videoViewer.mime];
+		}
 		videoViewer.showPlayer();
 	},
 	showPlayer : function() {
