@@ -1,7 +1,18 @@
 var videoViewer = {
 	UI : {
-		playerTemplate : '<header><link href="'+OC.filePath('files_videoplayer', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videoplayer', 'videojs', 'src')+'/video.js"></script>' +
-		'</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
+		loadVideoJS: function() {
+			if (this.videoJSLoaded) {
+				return $.when();
+			} else {
+				this.videoJSLoaded = true;
+				var stylePath = OC.filePath('files_videoplayer', 'videojs', 'src/video-js.css');
+				$('head').append($('<link rel="stylesheet" type="text/css" href="' + stylePath + '"/>'));
+				var scriptPath = OC.filePath('files_videoplayer', 'videojs', 'src/video.js');
+				return $.getScript(scriptPath)
+			}
+		},
+		videoJSLoaded: false,
+		playerTemplate : '<video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {
@@ -9,8 +20,7 @@ var videoViewer = {
 			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>').appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
 								.replace(/%type%/g, escapeHTML(videoViewer.mime))
-								.replace(/%src%/g, escapeHTML(videoViewer.location))
-			;
+								.replace(/%src%/g, escapeHTML(videoViewer.location));
 			$(playerView).prependTo('#videoplayer');
 			// add event to overlay
 			$("#videoplayer_overlay").on("click", function(e) {
@@ -61,7 +71,9 @@ var videoViewer = {
 		videoViewer.showPlayer();
 	},
 	showPlayer : function() {
-		videoViewer.UI.show();
+		videoViewer.UI.loadVideoJS().then(function() {
+			videoViewer.UI.show();
+		});
 	},
 	hidePlayer : function() {
 		videoViewer.player = false;
