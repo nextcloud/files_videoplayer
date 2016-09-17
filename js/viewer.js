@@ -1,35 +1,50 @@
 var videoViewer = {
 	UI : {
-		playerTemplate : '<header><link href="'+OC.filePath('files_videoplayer', 'videojs', 'src')+'/video-js.css" rel="stylesheet"><script src="'+OC.filePath('files_videoplayer', 'videojs', 'src')+'/video.js"></script>' +
-		'</header><video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
+		loadVideoJS: function() {
+			if (this.videoJSLoaded) {
+				return $.when();
+			} else {
+				this.videoJSLoaded = true;
+				var stylePath = OC.filePath('files_videoplayer', 'videojs', 'src/video-js.css');
+				$('head').append($('<link rel="stylesheet" type="text/css" href="' + stylePath + '"/>'));
+				var scriptPath = OC.filePath('files_videoplayer', 'videojs', 'src/video.js');
+				return $.getScript(scriptPath)
+			}
+		},
+		videoJSLoaded: false,
+		playerTemplate : '<video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {
 			// insert HTML
-			$('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>').appendTo('body');
+			var overlay = $('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>');
+			overlay.appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
-								.replace(/%type%/g, escapeHTML(videoViewer.mime))
-								.replace(/%src%/g, escapeHTML(videoViewer.location))
-			;
+								.replace(/%src%/g, escapeHTML(videoViewer.location));
+			if (videoViewer.mime) {
+				playerView = playerView.replace(/%type%/g, escapeHTML(videoViewer.mime));
+			} else {
+				playerView = playerView.replace(/type="%type%"/g, '');
+			}
 			$(playerView).prependTo('#videoplayer');
-			// add event to overlay
-			$("#videoplayer_overlay").on("click", function(e) {
-				if (e.target != this) {
-					return;
-				} else {
+			// close when clicking on the overlay
+			overlay.on("click", function(e) {
+				if (e.target === this) {
 					videoViewer.hidePlayer();
 				}
 			});
 			// show elements
-			$('#videoplayer_overlay').fadeIn('fast');
+			overlay.fadeIn('fast');
 			// initialize player
-			var vjsPlayer = videojs("my_video_1");
-			// append close button to video element
-			$("#my_video_1").append('<a class="icon-view-close" id="box-close" href="#"></a>');
-			// add event to close button
-			$('#box-close').click(videoViewer.hidePlayer);
-			// autoplay
-			vjsPlayer.play();
+			videojs("my_video_1").ready(function() {
+				videoViewer.player = this;
+				// append close button to video element
+				var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
+				$("#my_video_1").append(closeButton);
+				// autoplay
+				videoViewer.player.play();
+			});
+
 		},
 		hide : function() {
 			$('#videoplayer_overlay').fadeOut('fast', function() {
@@ -47,7 +62,11 @@ var videoViewer = {
 		'video/x-flv',
 		'video/ogg',
 		'video/quicktime',
+		'video/x-matroska',
 	],
+	mimeTypeAliasses: {
+		'video/x-matroska': 'video/webm' // chrome is a little kid that refuses to play mkv if it knows it's an mkv, webm uses the same container format
+	},
 	onView : function(file, data) {
 		videoViewer.file = file;
 		videoViewer.dir = data.dir;
@@ -58,19 +77,20 @@ var videoViewer = {
 			videoViewer.location = OC.linkToRemote('webdav') + OC.joinPaths(videoViewer.dir, file);
 		}
 		videoViewer.mime = data.$file.attr('data-mime');
+		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
+			videoViewer.mime = videoViewer.mimeTypeAliasses[videoViewer.mime];
+		}
 		videoViewer.showPlayer();
 	},
 	showPlayer : function() {
-		videoViewer.UI.show();
+		videoViewer.UI.loadVideoJS().then(function() {
+			videoViewer.UI.show();
+		});
 	},
 	hidePlayer : function() {
+		videoViewer.player.dispose();
 		videoViewer.player = false;
-		delete videoViewer.player;
 		videoViewer.UI.hide();
-		// force close socket
-		$('video').each(function() {
-		    $($(this)[0]).attr('src', '');
-		});
 	},
 	log : function(message){
 		console.log(message);
