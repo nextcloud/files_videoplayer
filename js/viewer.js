@@ -88,9 +88,11 @@ var videoViewer = {
 		});
 	},
 	hidePlayer : function() {
-		videoViewer.player.dispose();
-		videoViewer.player = false;
-		videoViewer.UI.hide();
+		if (videoViewer.player !== null && videoViewer.player !== false) {
+			videoViewer.player.dispose();
+			videoViewer.player = false;
+			videoViewer.UI.hide();
+		}
 	},
 	log : function(message){
 		console.log(message);
