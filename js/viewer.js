@@ -1,18 +1,18 @@
 var videoViewer = {
 	UI : {
 		loadVideoJS: function() {
-			if (this.videoJSLoaded) {
+			if (this.videoLibLoaded) {
 				return $.when();
 			} else {
-				this.videoJSLoaded = true;
-				var stylePath = OC.filePath('files_videoplayer', 'videojs', 'src/video-js.css');
+				this.videoLibLoaded = true;
+				var stylePath = OC.filePath('files_videoplayer', 'mediaelement', 'mediaelementplayer.min.css');
 				$('head').append($('<link rel="stylesheet" type="text/css" href="' + stylePath + '"/>'));
-				var scriptPath = OC.filePath('files_videoplayer', 'videojs', 'src/video.js');
+				var scriptPath = OC.filePath('files_videoplayer', 'mediaelement', 'mediaelementplayer.min.js');
 				return $.getScript(scriptPath)
 			}
 		},
-		videoJSLoaded: false,
-		playerTemplate : '<video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
+		videoLibLoaded: false,
+		playerTemplate : '<video id="my_video_1" controls preload="auto" autoplay="true" width="100%" height="100%">' +
 		'<source type="%type%" src="%src%" />' +
 		'</video>',
 		show : function () {
@@ -36,13 +36,20 @@ var videoViewer = {
 			// show elements
 			overlay.fadeIn('fast');
 			// initialize player
-			videojs("my_video_1").ready(function() {
-				videoViewer.player = this;
-				// append close button to video element
-				var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
-				$("#my_video_1").append(closeButton);
-				// autoplay
-				videoViewer.player.play();
+			$("#my_video_1").mediaelementplayer({
+				features: ['playpause','loop','current','progress','duration','volume','fullscreen'],
+				alwaysShowControls: false,
+				success: function(mediaElement, domElement, player) {
+					videoViewer.player = mediaElement;
+					// append close button to video element
+					var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
+					$("#videoplayer").append(closeButton);
+					// autoplay
+					videoViewer.player.play();
+				},
+				error: function() {
+					alert('MediaElement initialization failed.');
+				}
 			});
 
 		},
@@ -89,7 +96,7 @@ var videoViewer = {
 	},
 	hidePlayer : function() {
 		if (videoViewer.player !== null && videoViewer.player !== false) {
-			videoViewer.player.dispose();
+			videoViewer.player.remove();
 			videoViewer.player = false;
 			videoViewer.UI.hide();
 		}
