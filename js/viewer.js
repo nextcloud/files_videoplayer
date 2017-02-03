@@ -65,7 +65,7 @@ var videoViewer = {
 		'video/x-matroska'
 	],
 	mimeTypeAliasses: {
-		'video/x-matroska': 'video/webm' // chrome is a little kid that refuses to play mkv if it knows it's an mkv, webm uses the same container format
+		'video/x-matroska': 'video/webm' // mkv support for Chrome. webm uses the same container format
 	},
 	onView : function(file, data) {
 		videoViewer.file = file;
