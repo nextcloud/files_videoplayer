@@ -62,20 +62,15 @@ var videoViewer = {
 		'video/x-flv',
 		'video/ogg',
 		'video/quicktime',
-		'video/x-matroska',
+		'video/x-matroska'
 	],
 	mimeTypeAliasses: {
-		'video/x-matroska': 'video/webm' // chrome is a little kid that refuses to play mkv if it knows it's an mkv, webm uses the same container format
+		'video/x-matroska': 'video/webm' // mkv support for Chrome. webm uses the same container format
 	},
 	onView : function(file, data) {
 		videoViewer.file = file;
 		videoViewer.dir = data.dir;
-		if ($('#isPublic').length){
-			// No seek for public videos atm, sorry
-			videoViewer.location = data.fileList.getDownloadUrl(file, videoViewer.dir);
-		} else {
-			videoViewer.location = OC.linkToRemote('webdav') + OC.joinPaths(videoViewer.dir, file);
-		}
+		videoViewer.location = data.fileList.getDownloadUrl(file, videoViewer.dir);
 		videoViewer.mime = data.$file.attr('data-mime');
 		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
 			videoViewer.mime = videoViewer.mimeTypeAliasses[videoViewer.mime];
