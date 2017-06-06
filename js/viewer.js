@@ -8,7 +8,7 @@ var videoViewer = {
 				var stylePath = OC.filePath('files_videoplayer', 'videojs', 'src/video-js.css');
 				$('head').append($('<link rel="stylesheet" type="text/css" href="' + stylePath + '"/>'));
 				var scriptPath = OC.filePath('files_videoplayer', 'videojs', 'src/video.js');
-				return $.getScript(scriptPath)
+				return $.getScript(scriptPath, function (xhr) {eval(xhr);});
 			}
 		},
 		videoJSLoaded: false,
