@@ -23,6 +23,6 @@
 	<bugs>https://github.com/owncloud/files_videoplayer/issues</bugs>
 	<repository type="git">https://github.com/owncloud/files_videoplayer.git</repository>
 	<dependencies>
-		<nextcloud min-version="12" max-version="12" />
+		<nextcloud min-version="13" max-version="13" />
 	</dependencies>
 </info>
