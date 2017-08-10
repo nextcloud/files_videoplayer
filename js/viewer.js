@@ -46,6 +46,8 @@ var videoViewer = {
 					$("#videoplayer").append(closeButton);
 					// autoplay
 					videoViewer.player.play();
+					// focus the player to make keyboard shortcuts work
+					$(".mejs__video").focus();
 				},
 				error: function() {
 					alert('MediaElement initialization failed.');
