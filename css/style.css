@@ -77,6 +77,11 @@
 	cursor: pointer;
 }
 
+/* overwrite Nextcloud default CSS  */
+#videoplayer button:not(:disabled):not(.primary):active {
+	background-color: unset;
+}
+
 /* Internet Explorer */
 
 .lte9 #videoplayer_outer_container {
