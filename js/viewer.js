@@ -39,6 +39,7 @@ var videoViewer = {
 			$("#my_video_1").mediaelementplayer({
 				features: ['playpause','loop','current','progress','duration','volume','fullscreen'],
 				alwaysShowControls: false,
+				startVolume: 1,
 				success: function(mediaElement, domElement, player) {
 					videoViewer.player = mediaElement;
 					// append close button to video element
