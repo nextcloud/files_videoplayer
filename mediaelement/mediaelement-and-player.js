@@ -866,7 +866,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			if (methodName === 'play' && t.mediaElement.rendererName === 'native_dash') {
 				setTimeout(function () {
 					t.mediaElement.renderer[methodName](args);
-				}, 100);
+				}, 150);
 			} else {
 				t.mediaElement.renderer[methodName](args);
 			}
@@ -1645,10 +1645,12 @@ Object.assign(_player2.default.prototype, {
 						}
 					}
 
-					var half = t.timefloat.offsetWidth / 2;
-					if (x <= t.timefloat.offsetWidth + half) {
+					var half = t.timefloat.offsetWidth / 2,
+					    offsetContainer = mejs.Utils.offset(t.container);
+
+					if (x - offsetContainer.left < t.timefloat.offsetWidth) {
 						leftPos = half;
-					} else if (x >= t.container.offsetWidth - half) {
+					} else if (x - offsetContainer.left >= t.container.offsetWidth - half) {
 						leftPos = t.total.offsetWidth - half;
 					} else {
 						leftPos = pos;
@@ -4004,7 +4006,7 @@ var MediaElementPlayer = function () {
 					if (t.options.enableAutosize) {
 						t.media.addEventListener('loadedmetadata', function (e) {
 							var target = e !== undefined ? e.detail.target || e.target : t.media;
-							if (t.options.videoHeight <= 0 && !t.domNode.getAttribute('height') && target !== null && !isNaN(target.videoHeight)) {
+							if (t.options.videoHeight <= 0 && !t.domNode.getAttribute('height') && !t.domNode.style.height && target !== null && !isNaN(target.videoHeight)) {
 								t.setPlayerSize(target.videoWidth, target.videoHeight);
 								t.setControlsSize();
 								t.media.setSize(target.videoWidth, target.videoHeight);
@@ -4182,14 +4184,14 @@ var MediaElementPlayer = function () {
 			var errorContent = typeof t.options.customError === 'function' ? t.options.customError(t.media, t.media.originalNode) : t.options.customError,
 			    imgError = '';
 
-			if (errorContent) {
+			if (!errorContent) {
 				var poster = t.media.originalNode.getAttribute('poster');
 				if (poster) {
 					imgError = '<img src="' + poster + '" alt="' + _mejs2.default.i18n.t('mejs.download-file') + '">';
 				}
 
 				if (e.message) {
-					errorContent += '<p>' + e.message + '</p>';
+					errorContent = '<p>' + e.message + '</p>';
 				}
 
 				if (e.urls) {
@@ -4204,6 +4206,10 @@ var MediaElementPlayer = function () {
 				errorContainer.innerHTML = errorContent;
 				t.layers.querySelector('.' + t.options.classPrefix + 'overlay-error').innerHTML = '' + imgError + errorContainer.outerHTML;
 				t.layers.querySelector('.' + t.options.classPrefix + 'overlay-error').parentNode.style.display = 'block';
+			}
+
+			if (t.controlsEnabled) {
+				t.disableControls();
 			}
 		}
 	}, {
@@ -4871,6 +4877,12 @@ var MediaElementPlayer = function () {
 				hasError = true;
 			});
 
+			media.addEventListener('loadedmetadata', function () {
+				if (!t.controlsEnabled) {
+					t.enableControls();
+				}
+			});
+
 			media.addEventListener('keydown', function (e) {
 				t.onkeydown(player, media, e);
 				hasError = false;
@@ -5023,6 +5035,8 @@ var MediaElementPlayer = function () {
 
 			t.node.style.width = nativeWidth;
 			t.node.style.height = nativeHeight;
+
+			t.setPlayerSize(0, 0);
 
 			if (!t.isDynamic) {
 				(function () {
@@ -6109,7 +6123,7 @@ var NativeFlv = {
 	_createPlayer: function _createPlayer(settings) {
 		flvjs.LoggingControl.enableDebug = settings.options.debug;
 		flvjs.LoggingControl.enableVerbose = settings.options.debug;
-		var player = flvjs.createPlayer(settings.options);
+		var player = flvjs.createPlayer(settings.options, settings.configs);
 		_window2.default['__ready__' + settings.id](player);
 		return player;
 	}
@@ -6168,6 +6182,7 @@ var FlvNativeRenderer = {
 							_flvOptions.cors = options.flv.cors;
 							_flvOptions.debug = options.flv.debug;
 							_flvOptions.path = options.flv.path;
+							var _flvConfigs = options.flv.configs;
 
 							flvPlayer.destroy();
 							for (var i = 0, total = events.length; i < total; i++) {
@@ -6175,6 +6190,7 @@ var FlvNativeRenderer = {
 							}
 							flvPlayer = NativeFlv._createPlayer({
 								options: _flvOptions,
+								configs: _flvConfigs,
 								id: id
 							});
 							flvPlayer.attachMediaElement(node);
@@ -6259,6 +6275,7 @@ var FlvNativeRenderer = {
 		flvOptions.cors = options.flv.cors;
 		flvOptions.debug = options.flv.debug;
 		flvOptions.path = options.flv.path;
+		var flvConfigs = options.flv.configs;
 
 		node.setSize = function (width, height) {
 			node.style.width = width + 'px';
@@ -6290,6 +6307,7 @@ var FlvNativeRenderer = {
 
 		mediaElement.promises.push(NativeFlv.load({
 			options: flvOptions,
+			configs: flvConfigs,
 			id: id
 		}));
 
@@ -6649,19 +6667,19 @@ var HtmlMediaElement = {
 			};
 		};
 
-		for (var i = 0, total = props.length; i < total; i++) {
+		for (var i = 0, _total = props.length; i < _total; i++) {
 			assignGettersSetters(props[i]);
 		}
 
 		var events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
 		    assignEvents = function assignEvents(eventName) {
 			node.addEventListener(eventName, function (e) {
-				var event = (0, _general.createEvent)(e.type, mediaElement);
+				var event = (0, _general.createEvent)(e.type, e.target);
 				mediaElement.dispatchEvent(event);
 			});
 		};
 
-		for (var _i = 0, _total = events.length; _i < _total; _i++) {
+		for (var _i = 0, _total2 = events.length; _i < _total2; _i++) {
 			assignEvents(events[_i]);
 		}
 
@@ -6683,14 +6701,28 @@ var HtmlMediaElement = {
 			return node;
 		};
 
+		var index = 0,
+		    total = mediaFiles.length;
 		if (mediaFiles && mediaFiles.length > 0) {
-			for (var _i2 = 0, _total2 = mediaFiles.length; _i2 < _total2; _i2++) {
-				if (_renderer.renderer.renderers[options.prefix].canPlayType(mediaFiles[_i2].type)) {
-					node.setAttribute('src', mediaFiles[_i2].src);
+			for (; index < total; index++) {
+				if (_renderer.renderer.renderers[options.prefix].canPlayType(mediaFiles[index].type)) {
+					node.setAttribute('src', mediaFiles[index].src);
 					break;
 				}
 			}
 		}
+
+		node.addEventListener('error', function (e) {
+			if (e.target.error.code === 4) {
+				if (index < total) {
+					node.src = mediaFiles[index++].src;
+					node.load();
+					node.play();
+				} else {
+					mediaElement.generateError('Media error: Format(s) not supported or source(s) not found', mediaFiles);
+				}
+			}
+		});
 
 		var event = (0, _general.createEvent)('rendererready', node);
 		mediaElement.dispatchEvent(event);

@@ -866,7 +866,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			if (methodName === 'play' && t.mediaElement.rendererName === 'native_dash') {
 				setTimeout(function () {
 					t.mediaElement.renderer[methodName](args);
-				}, 100);
+				}, 150);
 			} else {
 				t.mediaElement.renderer[methodName](args);
 			}
@@ -1937,7 +1937,7 @@ var NativeFlv = {
 	_createPlayer: function _createPlayer(settings) {
 		flvjs.LoggingControl.enableDebug = settings.options.debug;
 		flvjs.LoggingControl.enableVerbose = settings.options.debug;
-		var player = flvjs.createPlayer(settings.options);
+		var player = flvjs.createPlayer(settings.options, settings.configs);
 		_window2.default['__ready__' + settings.id](player);
 		return player;
 	}
@@ -1996,6 +1996,7 @@ var FlvNativeRenderer = {
 							_flvOptions.cors = options.flv.cors;
 							_flvOptions.debug = options.flv.debug;
 							_flvOptions.path = options.flv.path;
+							var _flvConfigs = options.flv.configs;
 
 							flvPlayer.destroy();
 							for (var i = 0, total = events.length; i < total; i++) {
@@ -2003,6 +2004,7 @@ var FlvNativeRenderer = {
 							}
 							flvPlayer = NativeFlv._createPlayer({
 								options: _flvOptions,
+								configs: _flvConfigs,
 								id: id
 							});
 							flvPlayer.attachMediaElement(node);
@@ -2087,6 +2089,7 @@ var FlvNativeRenderer = {
 		flvOptions.cors = options.flv.cors;
 		flvOptions.debug = options.flv.debug;
 		flvOptions.path = options.flv.path;
+		var flvConfigs = options.flv.configs;
 
 		node.setSize = function (width, height) {
 			node.style.width = width + 'px';
@@ -2118,6 +2121,7 @@ var FlvNativeRenderer = {
 
 		mediaElement.promises.push(NativeFlv.load({
 			options: flvOptions,
+			configs: flvConfigs,
 			id: id
 		}));
 
@@ -2477,19 +2481,19 @@ var HtmlMediaElement = {
 			};
 		};
 
-		for (var i = 0, total = props.length; i < total; i++) {
+		for (var i = 0, _total = props.length; i < _total; i++) {
 			assignGettersSetters(props[i]);
 		}
 
 		var events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
 		    assignEvents = function assignEvents(eventName) {
 			node.addEventListener(eventName, function (e) {
-				var event = (0, _general.createEvent)(e.type, mediaElement);
+				var event = (0, _general.createEvent)(e.type, e.target);
 				mediaElement.dispatchEvent(event);
 			});
 		};
 
-		for (var _i = 0, _total = events.length; _i < _total; _i++) {
+		for (var _i = 0, _total2 = events.length; _i < _total2; _i++) {
 			assignEvents(events[_i]);
 		}
 
@@ -2511,14 +2515,28 @@ var HtmlMediaElement = {
 			return node;
 		};
 
+		var index = 0,
+		    total = mediaFiles.length;
 		if (mediaFiles && mediaFiles.length > 0) {
-			for (var _i2 = 0, _total2 = mediaFiles.length; _i2 < _total2; _i2++) {
-				if (_renderer.renderer.renderers[options.prefix].canPlayType(mediaFiles[_i2].type)) {
-					node.setAttribute('src', mediaFiles[_i2].src);
+			for (; index < total; index++) {
+				if (_renderer.renderer.renderers[options.prefix].canPlayType(mediaFiles[index].type)) {
+					node.setAttribute('src', mediaFiles[index].src);
 					break;
 				}
 			}
 		}
+
+		node.addEventListener('error', function (e) {
+			if (e.target.error.code === 4) {
+				if (index < total) {
+					node.src = mediaFiles[index++].src;
+					node.load();
+					node.play();
+				} else {
+					mediaElement.generateError('Media error: Format(s) not supported or source(s) not found', mediaFiles);
+				}
+			}
+		});
 
 		var event = (0, _general.createEvent)('rendererready', node);
 		mediaElement.dispatchEvent(event);
