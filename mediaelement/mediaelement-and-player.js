@@ -1207,6 +1207,21 @@ Object.assign(_player2.default.prototype, {
 
 		player.fullscreenBtn = fullscreenBtn;
 
+		t.options.keyActions.push({
+			keys: [70],
+			action: function action(player, media, key, event) {
+				if (!event.ctrlKey) {
+					if (typeof player.enterFullScreen !== 'undefined') {
+						if (player.isFullScreen) {
+							player.exitFullScreen();
+						} else {
+							player.enterFullScreen();
+						}
+					}
+				}
+			}
+		});
+
 		t.exitFullscreenCallback = function (e) {
 			var key = e.which || e.keyCode || 0;
 			if (key === 27 && (Features.HAS_TRUE_NATIVE_FULLSCREEN && Features.IS_FULLSCREEN || t.isFullScreen)) {
@@ -1548,6 +1563,39 @@ Object.assign(_player2.default.prototype, {
 
 		t.addControlElement(rail, 'progress');
 
+		t.options.keyActions.push({
+			keys: [37, 227],
+			action: function action(player) {
+				if (!isNaN(player.duration) && player.duration > 0) {
+					if (player.isVideo) {
+						player.showControls();
+						player.startControlsTimer();
+					}
+
+					player.container.querySelector('.' + _player.config.classPrefix + 'time-total').focus();
+
+					var newTime = Math.max(player.currentTime - player.options.defaultSeekBackwardInterval(player), 0);
+					player.setCurrentTime(newTime);
+				}
+			}
+		}, {
+			keys: [39, 228],
+			action: function action(player) {
+
+				if (!isNaN(player.duration) && player.duration > 0) {
+					if (player.isVideo) {
+						player.showControls();
+						player.startControlsTimer();
+					}
+
+					player.container.querySelector('.' + _player.config.classPrefix + 'time-total').focus();
+
+					var newTime = Math.min(player.currentTime + player.options.defaultSeekForwardInterval(player), player.duration);
+					player.setCurrentTime(newTime);
+				}
+			}
+		});
+
 		controls.querySelector('.' + t.options.classPrefix + 'time-buffering').style.display = 'none';
 
 		t.rail = controls.querySelector('.' + t.options.classPrefix + 'time-rail');
@@ -1727,16 +1775,35 @@ Object.assign(_player2.default.prototype, {
 				    seekBackward = player.options.defaultSeekBackwardInterval(media);
 
 				var seekTime = t.getCurrentTime();
+				var volume = t.container.querySelector('.' + t.options.classPrefix + 'volume-slider');
+
+				if (keyCode === 38 || keyCode === 40) {
+					if (volume) {
+						volume.style.display = 'block';
+					}
+					if (t.isVideo) {
+						t.showControls();
+						t.startControlsTimer();
+					}
+
+					var newVolume = keyCode === 38 ? Math.min(t.volume + 0.1, 1) : Math.max(t.volume - 0.1, 0),
+					    mutePlayer = newVolume <= 0;
+					t.setVolume(newVolume);
+					t.setMuted(mutePlayer);
+					return;
+				} else {
+					if (volume) {
+						volume.style.display = 'none';
+					}
+				}
 
 				switch (keyCode) {
 					case 37:
-					case 40:
 						if (t.getDuration() !== Infinity) {
 							seekTime -= seekBackward;
 						}
 						break;
 					case 39:
-					case 38:
 						if (t.getDuration() !== Infinity) {
 							seekTime += seekForward;
 						}
@@ -1747,20 +1814,14 @@ Object.assign(_player2.default.prototype, {
 					case 35:
 						seekTime = duration;
 						break;
+					case 13:
 					case 32:
-						if (!_constants.IS_FIREFOX) {
+						if (_constants.IS_FIREFOX) {
 							if (t.paused) {
 								t.play();
 							} else {
 								t.pause();
 							}
-						}
-						return;
-					case 13:
-						if (t.paused) {
-							t.play();
-						} else {
-							t.pause();
 						}
 						return;
 					default:
@@ -1778,6 +1839,7 @@ Object.assign(_player2.default.prototype, {
 				}
 
 				t.setCurrentTime(seekTime);
+				player.showControls();
 
 				e.preventDefault();
 				e.stopPropagation();
@@ -2872,6 +2934,60 @@ Object.assign(_player2.default.prototype, {
 
 		t.addControlElement(mute, 'volume');
 
+		t.options.keyActions.push({
+			keys: [38],
+			action: function action(player) {
+				var volumeSlider = player.container.querySelector('.' + _player.config.classPrefix + 'volume-slider');
+				if (volumeSlider || player.container.querySelector('.' + _player.config.classPrefix + 'volume-slider').matches(':focus')) {
+					volumeSlider.style.display = 'block';
+				}
+				if (player.isVideo) {
+					player.showControls();
+					player.startControlsTimer();
+				}
+
+				var newVolume = Math.min(player.volume + 0.1, 1);
+				player.setVolume(newVolume);
+				if (newVolume > 0) {
+					player.setMuted(false);
+				}
+			}
+		}, {
+			keys: [40],
+			action: function action(player) {
+				var volumeSlider = player.container.querySelector('.' + _player.config.classPrefix + 'volume-slider');
+				if (volumeSlider) {
+					volumeSlider.style.display = 'block';
+				}
+
+				if (player.isVideo) {
+					player.showControls();
+					player.startControlsTimer();
+				}
+
+				var newVolume = Math.max(player.volume - 0.1, 0);
+				player.setVolume(newVolume);
+
+				if (newVolume <= 0.1) {
+					player.setMuted(true);
+				}
+			}
+		}, {
+			keys: [77],
+			action: function action(player) {
+				player.container.querySelector('.' + _player.config.classPrefix + 'volume-slider').style.display = 'block';
+				if (player.isVideo) {
+					player.showControls();
+					player.startControlsTimer();
+				}
+				if (player.media.muted) {
+					player.setMuted(false);
+				} else {
+					player.setMuted(true);
+				}
+			}
+		});
+
 		if (mode === 'horizontal') {
 			var anchor = _document2.default.createElement('a');
 			anchor.className = t.options.classPrefix + 'horizontal-volume-slider';
@@ -2981,6 +3097,13 @@ Object.assign(_player2.default.prototype, {
 				(0, _dom.addClass)(mute, t.options.classPrefix + 'mute');
 			}
 		};
+
+		player.container.addEventListener('keydown', function (e) {
+			var hasFocus = !!e.target.closest('.' + t.options.classPrefix + 'container');
+			if (!hasFocus && mode === 'vertical') {
+				volumeSlider.style.display = 'none';
+			}
+		});
 
 		mute.addEventListener('mouseenter', function (e) {
 			if (e.target === mute) {
@@ -3366,99 +3489,6 @@ var config = exports.config = {
 				} else {
 					player.pause();
 				}
-			}
-		}
-	}, {
-		keys: [38],
-		action: function action(player) {
-
-			if (player.container.querySelector('.' + config.classPrefix + 'volume-button>button').matches(':focus') || player.container.querySelector('.' + config.classPrefix + 'volume-slider').matches(':focus')) {
-				player.container.querySelector('.' + config.classPrefix + 'volume-slider').style.display = '';
-			}
-			if (player.isVideo) {
-				player.showControls();
-				player.startControlsTimer();
-			}
-
-			var newVolume = Math.min(player.volume + 0.1, 1);
-			player.setVolume(newVolume);
-			if (newVolume > 0) {
-				player.setMuted(false);
-			}
-		}
-	}, {
-		keys: [40],
-		action: function action(player) {
-
-			if (player.container.querySelector('.' + config.classPrefix + 'volume-button>button').matches(':focus') || player.container.querySelector('.' + config.classPrefix + 'volume-slider').matches(':focus')) {
-				player.container.querySelector('.' + config.classPrefix + 'volume-slider').style.display = '';
-			}
-
-			if (player.isVideo) {
-				player.showControls();
-				player.startControlsTimer();
-			}
-
-			var newVolume = Math.max(player.volume - 0.1, 0);
-			player.setVolume(newVolume);
-
-			if (newVolume <= 0.1) {
-				player.setMuted(true);
-			}
-		}
-	}, {
-		keys: [37, 227],
-		action: function action(player) {
-			if (!isNaN(player.duration) && player.duration > 0) {
-				if (player.isVideo) {
-					player.showControls();
-					player.startControlsTimer();
-				}
-
-				var newTime = Math.max(player.currentTime - player.options.defaultSeekBackwardInterval(player), 0);
-				player.setCurrentTime(newTime);
-			}
-		}
-	}, {
-		keys: [39, 228],
-		action: function action(player) {
-
-			if (!isNaN(player.duration) && player.duration > 0) {
-				if (player.isVideo) {
-					player.showControls();
-					player.startControlsTimer();
-				}
-
-				var newTime = Math.min(player.currentTime + player.options.defaultSeekForwardInterval(player), player.duration);
-				player.setCurrentTime(newTime);
-			}
-		}
-	}, {
-		keys: [70],
-		action: function action(player, media, key, event) {
-			if (!event.ctrlKey) {
-				if (typeof player.enterFullScreen !== 'undefined') {
-					if (player.isFullScreen) {
-						player.exitFullScreen();
-					} else {
-						player.enterFullScreen();
-					}
-				}
-			}
-		}
-	}, {
-		keys: [77],
-		action: function action(player) {
-
-			player.container.querySelector('.' + config.classPrefix + 'volume-slider').style.display = '';
-			if (player.isVideo) {
-				player.showControls();
-				player.startControlsTimer();
-			}
-			if (player.media.muted) {
-				player.setMuted(false);
-			} else {
-				player.setMuted(true);
 			}
 		}
 	}]
@@ -4926,6 +4956,7 @@ var MediaElementPlayer = function () {
 							keyAction.action(player, media, e.keyCode, e);
 							e.preventDefault();
 							e.stopPropagation();
+							return;
 						}
 					}
 				}
@@ -8019,9 +8050,9 @@ if (window.Element && !Element.prototype.closest) {
 })();
 
 if (/firefox/i.test(navigator.userAgent)) {
-	window.mediaElementJsOldGetComputedStyle = window.getComputedStyle;
+	var getComputedStyle = window.getComputedStyle;
 	window.getComputedStyle = function (el, pseudoEl) {
-		var t = window.mediaElementJsOldGetComputedStyle(el, pseudoEl);
+		var t = getComputedStyle(el, pseudoEl);
 		return t === null ? { getPropertyValue: function getPropertyValue() {} } : t;
 	};
 }
