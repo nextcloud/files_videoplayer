@@ -37,7 +37,7 @@ var videoViewer = {
 			overlay.fadeIn('fast');
 			// initialize player
 			$("#my_video_1").mediaelementplayer({
-				features: ['playpause','loop','current','progress','duration','volume','fullscreen'],
+				features: ['playpause','loop','current','progress','duration','tracks','volume','fullscreen'],
 				alwaysShowControls: false,
 				autoRewind: false,
 				startVolume: 1,
@@ -61,6 +61,19 @@ var videoViewer = {
 			$('#videoplayer_overlay').fadeOut('fast', function() {
 				$('#videoplayer_overlay').remove();
 			});
+		},
+		detectSubs : function() {
+			var lastIndex = videoViewer.file.lastIndexOf('.');
+			var candidatesFilename = videoViewer.file.substr(0, lastIndex);
+			var candidates = [];
+			for (var i = 0; i < videoViewer.ls.length; i++) {
+				var candidate = videoViewer.ls[i].name.indexOf(candidatesFilename);
+				if (videoViewer.ls[i].name != videoViewer.file && candidate === 0) {
+					candidates.push(videoViewer.ls[i].name);
+				}
+			}
+			console.log(candidates);
+			return $.when();
 		}
 	},
 	mime : null,
@@ -81,12 +94,15 @@ var videoViewer = {
 	onView : function(file, data) {
 		videoViewer.file = file;
 		videoViewer.dir = data.dir;
+		videoViewer.ls = data.fileList.files;
 		videoViewer.location = data.fileList.getDownloadUrl(file, videoViewer.dir);
 		videoViewer.mime = data.$file.attr('data-mime');
 		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
 			videoViewer.mime = videoViewer.mimeTypeAliasses[videoViewer.mime];
 		}
-		videoViewer.showPlayer();
+		videoViewer.UI.detectSubs().then(function () {
+			videoViewer.showPlayer();
+		});
 	},
 	showPlayer : function() {
 		videoViewer.UI.loadVideoJS().then(function() {
