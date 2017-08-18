@@ -14,13 +14,15 @@ var videoViewer = {
 		videoLibLoaded: false,
 		playerTemplate : '<video id="my_video_1" controls preload="auto" autoplay="true" width="100%" height="100%">' +
 		'<source type="%type%" src="%src%" />' +
+		'%tracks%' +
 		'</video>',
 		show : function () {
 			// insert HTML
 			var overlay = $('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>');
 			overlay.appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
-								.replace(/%src%/g, escapeHTML(videoViewer.location));
+								.replace(/%src%/g, escapeHTML(videoViewer.location))
+								.replace(/%tracks%/g, tracks);
 			if (videoViewer.mime) {
 				playerView = playerView.replace(/%type%/g, escapeHTML(videoViewer.mime));
 			} else {
@@ -63,16 +65,29 @@ var videoViewer = {
 			});
 		},
 		detectSubs : function() {
-			var lastIndex = videoViewer.file.lastIndexOf('.');
-			var candidatesFilename = videoViewer.file.substr(0, lastIndex);
-			var candidates = [];
+			var fileEnding = videoViewer.file.lastIndexOf('.');
+			var candidateName = videoViewer.file.substr(0, fileEnding);
+			var languageRegex = /^.*([a-zA-Z]{2})\.srt$/g;
+			var subtitles = [];
+			// detect candidates
 			for (var i = 0; i < videoViewer.ls.length; i++) {
-				var candidate = videoViewer.ls[i].name.indexOf(candidatesFilename);
+				var candidate = videoViewer.ls[i].name.indexOf(candidateName);
+				// check if candidate is a subtitle file
 				if (videoViewer.ls[i].name != videoViewer.file && candidate === 0) {
-					candidates.push(videoViewer.ls[i].name);
+					var isSubtitle = videoViewer.ls[i].name.search(languageRegex);
+					// subtitles found
+					if (isSubtitle != -1) {
+						// detect language
+						while (language = languageRegex.exec(videoViewer.ls[i].name)) {
+							var srclang = language[1]
+						}
+						// build HTML
+						var sub = '<track kind="subtitles" src="/remote.php/webdav' + videoViewer.dir + '/' + videoViewer.ls[i].name + '" srclang="' + srclang + '" label="' + srclang + '" />';
+						subtitles.push(sub);
+					}
 				}
 			}
-			console.log(candidates);
+			tracks = subtitles.join('\r\n');
 			return $.when();
 		}
 	},
