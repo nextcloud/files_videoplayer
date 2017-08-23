@@ -65,6 +65,29 @@ var videoViewer = {
 			});
 		},
 		detectSubs : function() {
+			var langcodeToName = {
+				af: 'Afrikaans', am: 'Amharic', ar: 'Arabic', as: 'Assamese',
+				ba: 'Bashkir', be: 'Belarusian', bg: 'Bulgarian', bn: 'Bengali',
+				bo: 'Tibetan', br: 'Breton', ca: 'Catalan', co: 'Corsican',
+				cs: 'Czech', cy: 'Welsh', da: 'Danish', de: 'German',
+				dv: 'Divehi', el: 'Greek', en: 'English', es: 'Spanish',
+				et: 'Estonian', eu: 'Basque', fa: 'Persian', fi: 'Finnish',
+				fo: 'Faroese', fr: 'French', gd: 'Scottish Gaelic', gl: 'Galician',
+				gu: 'Gujarati', he: 'Hebrew', hi: 'Hindi', hr: 'Croatian',
+				hu: 'Hungarian', hy: 'Armenian', id: 'Indonesian', ig: 'Igbo',
+				is: 'Icelandic', it: 'Italian', ja: 'Japanese', ka: 'Georgian',
+				kk: 'Kazakh', km: 'Khmer', kn: 'Kannada', ko: 'Korean',
+				lb: 'Luxembourgish', lo: 'Lao', lt: 'Lithuanian', lv: 'Latvian',
+				mi: 'Maori', ml: 'Malayalam', mr: 'Marathi', ms: 'Malay',
+				mt: 'Maltese', ne: 'Nepali', nl: 'Dutch', no: 'Norwegian',
+				oc: 'Occitan', or: 'Oriya', pl: 'Polish', ps: 'Pashto',
+				pt: 'Portuguese', qu: 'Quechua', ro: 'Romanian', ru: 'Russian',
+				rw: 'Kinyarwanda', sa: 'Sanskrit', si: 'Sinhala', sk: 'Slovak',
+				sl: 'Slovenian', sq: 'Albanian', sv: 'Swedish', ta: 'Tamil',
+				te: 'Telugu', th: 'Thai', tk: 'Turkmen', tr: 'Turkish',
+				tt: 'Tatar', uk: 'Ukrainian', ur: 'Urdu', vi: 'Vietnamese',
+				wo: 'Wolof', yo: 'Yoruba', zh: 'Chinese'
+			}
 			var fileEnding = videoViewer.file.lastIndexOf('.');
 			var candidateName = videoViewer.file.substr(0, fileEnding);
 			var languageRegex = /^.*([a-zA-Z]{2})\.srt$/g;
@@ -79,10 +102,11 @@ var videoViewer = {
 					if (isSubtitle != -1) {
 						// detect language
 						while (language = languageRegex.exec(videoViewer.ls[i].name)) {
-							var srclang = language[1]
+							var srclang = language[1];
+							var label = langcodeToName[srclang];
 						}
 						// build HTML
-						var sub = '<track kind="subtitles" src="/remote.php/webdav' + videoViewer.dir + '/' + videoViewer.ls[i].name + '" srclang="' + srclang + '" label="' + srclang + '" />';
+						var sub = '<track kind="subtitles" src="/remote.php/webdav' + videoViewer.dir + '/' + videoViewer.ls[i].name + '" srclang="' + srclang + '" label="' + label + '" />';
 						subtitles.push(sub);
 					}
 				}
