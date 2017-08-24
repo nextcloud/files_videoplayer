@@ -106,11 +106,12 @@ var videoViewer = {
 							var label = langcodeToName[srclang];
 						}
 						// build HTML
-						var sub = '<track kind="subtitles" src="/remote.php/webdav' + videoViewer.dir + '/' + videoViewer.ls[i].name + '" srclang="' + srclang + '" label="' + label + '" />';
+						var sub = '<track kind="subtitles" label="' + label + '" src="/remote.php/webdav' + videoViewer.dir + '/' + videoViewer.ls[i].name + '" srclang="' + srclang + '" />';
 						subtitles.push(sub);
 					}
 				}
 			}
+			subtitles.sort();
 			tracks = subtitles.join('\r\n');
 			return $.when();
 		}
