@@ -30,7 +30,7 @@ var videoViewer = {
 			}
 			$(playerView).prependTo('#videoplayer');
 			// close when clicking on the overlay
-			overlay.on("click", function(e) {
+			overlay.on('click', function(e) {
 				if (e.target === this) {
 					videoViewer.hidePlayer();
 				}
@@ -38,7 +38,7 @@ var videoViewer = {
 			// show elements
 			overlay.fadeIn('fast');
 			// initialize player
-			$("#my_video_1").mediaelementplayer({
+			$('#my_video_1').mediaelementplayer({
 				features: ['playpause','loop','current','progress','duration','tracks','volume','fullscreen'],
 				alwaysShowControls: false,
 				autoRewind: false,
@@ -47,11 +47,11 @@ var videoViewer = {
 					videoViewer.player = mediaElement;
 					// append close button to video element
 					var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
-					$("#videoplayer").append(closeButton);
+					$('#videoplayer').append(closeButton);
 					// autoplay
 					videoViewer.player.play();
 					// focus the player to make keyboard shortcuts work
-					$(".mejs__video").focus();
+					$('.mejs__video').focus();
 				},
 				error: function() {
 					alert('MediaElement initialization failed.');
