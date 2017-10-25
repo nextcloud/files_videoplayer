@@ -58,6 +58,7 @@ var videoViewer = {
 	player : null,
 	mimeTypes : [
 		'video/mp4',
+		'video/x-m4v',
 		'video/webm',
 		'video/x-flv',
 		'video/ogg',
