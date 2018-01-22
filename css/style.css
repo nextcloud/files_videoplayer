@@ -104,7 +104,7 @@
 
 #imgframe .video-js:not(.vjs-fullscreen),
 #imgframe .video-js:not(.vjs-fullscreen) .vjs-tech {
-	max-height: calc(100vh - 280px);
+	max-height: calc(100vh - 280px) !important;
 	min-height: 100px;
-	max-width: 100%;
+	max-width: 100% !important;
 }
