@@ -90,14 +90,21 @@
 	content: "" !important;
 }
 
+/* fix for fluid size of the player */
+#imgframe #videoplayer_view {
+	display: inline-block;
+}
+
 /* public sharing view styles */
 #imgframe .video-js .vjs-tech {
-	position: relative !important;
-	width: 100% !important;
-	height: auto !important;
+	position: relative;
+	width: auto;
+	height: auto;
 }
 
 #imgframe .video-js:not(.vjs-fullscreen),
 #imgframe .video-js:not(.vjs-fullscreen) .vjs-tech {
-	max-height: calc(100vh - 280px) !important;
+	max-height: calc(100vh - 280px);
+	min-height: 100px;
+	max-width: 100%;
 }
