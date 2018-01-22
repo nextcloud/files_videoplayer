@@ -85,7 +85,6 @@ var videoViewer = {
 		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
 			videoViewer.mime = videoViewer.mimeTypeAliasses[videoViewer.mime];
 		}
-		console.log(videoViewer);
 		videoViewer.showPlayer();
 	},
 	onViewInline : function (element, file, mime) {
@@ -131,7 +130,7 @@ $(document).ready(function(){
 		}
 	}
 
-	if($('#body-public').length) {
+	if($('#body-public').length && $('#imgframe').length) {
 		var videoUrl = $('#downloadURL').val();
 		var mimetype = $('#mimetype').val();
 		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
