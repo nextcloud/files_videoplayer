@@ -96,18 +96,14 @@
 	content: "" !important;
 }
 
-
-/* Internet Explorer */
-
-.lte9 #videoplayer_outer_container {
-	top: 1%;
-	left: 0;
-	right: 0;
-	margin: 0 auto;
-	transform: none;
+/* public sharing view styles */
+#imgframe .video-js .vjs-tech {
+	position: relative !important;
+	width: 100% !important;
+	height: auto !important;
 }
 
-.ie9 .video-js {
-	width: 100% !important;
-	height: 100% !important;
+#imgframe .video-js:not(.vjs-fullscreen),
+#imgframe .video-js:not(.vjs-fullscreen) .vjs-tech {
+	max-height: calc(100vh - 280px) !important;
 }
