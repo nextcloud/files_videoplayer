@@ -17,8 +17,6 @@ var videoViewer = {
 		'</video>',
 		show : function () {
 			// insert HTML
-			var overlay = $('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>');
-			overlay.appendTo('body');
 			var playerView = videoViewer.UI.playerTemplate
 								.replace(/%src%/g, escapeHTML(videoViewer.location));
 			if (videoViewer.mime) {
@@ -26,21 +24,31 @@ var videoViewer = {
 			} else {
 				playerView = playerView.replace(/type="%type%"/g, '');
 			}
-			$(playerView).prependTo('#videoplayer');
-			// close when clicking on the overlay
-			overlay.on("click", function(e) {
-				if (e.target === this) {
-					videoViewer.hidePlayer();
-				}
-			});
-			// show elements
-			overlay.fadeIn('fast');
+			if (videoViewer.inline === null) {
+				var overlay = $('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>');
+				overlay.appendTo('body');
+				$(playerView).prependTo('#videoplayer');
+				// close when clicking on the overlay
+				overlay.on("click", function (e) {
+					if (e.target === this) {
+						videoViewer.hidePlayer();
+					}
+				});
+				// show elements
+				overlay.fadeIn('fast');
+			} else {
+				var wrapper = $('<div id="videoplayer_view"></div>');
+				wrapper.append(playerView);
+				$(videoViewer.inline).html(wrapper);
+			}
 			// initialize player
 			videojs("my_video_1").ready(function() {
 				videoViewer.player = this;
-				// append close button to video element
-				var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
-				$("#my_video_1").append(closeButton);
+				if (videoViewer.inline === null) {
+					// append close button to video element
+					var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
+					$("#my_video_1").append(closeButton);
+				}
 				// autoplay
 				videoViewer.player.play();
 			});
@@ -56,6 +64,7 @@ var videoViewer = {
 	file : null,
 	location : null,
 	player : null,
+	inline : null,
 	mimeTypes : [
 		'video/mp4',
 		'video/x-m4v',
@@ -78,13 +87,22 @@ var videoViewer = {
 		}
 		videoViewer.showPlayer();
 	},
+	onViewInline : function (element, file, mime) {
+		videoViewer.location = file;
+		videoViewer.mime = mime;
+		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
+			videoViewer.mime = videoViewer.mimeTypeAliasses[videoViewer.mime];
+		}
+		videoViewer.inline = element;
+		videoViewer.showPlayer();
+	},
 	showPlayer : function() {
 		videoViewer.UI.loadVideoJS().then(function() {
 			videoViewer.UI.show();
 		});
 	},
 	hidePlayer : function() {
-		if (videoViewer.player !== null && videoViewer.player !== false) {
+		if (videoViewer.player !== null && videoViewer.player !== false && videoViewer.inline === null) {
 			videoViewer.player.dispose();
 			videoViewer.player = false;
 			videoViewer.UI.hide();
@@ -110,6 +128,12 @@ $(document).ready(function(){
 			OCA.Files.fileActions.register(mime, 'View', OC.PERMISSION_READ, '', videoViewer.onView);
 			OCA.Files.fileActions.setDefault(mime, 'View');
 		}
+	}
+
+	if($('#body-public').length && $('#imgframe').length) {
+		var videoUrl = $('#downloadURL').val();
+		var mimetype = $('#mimetype').val();
+		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
 	}
 
 });
