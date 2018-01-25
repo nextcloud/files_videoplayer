@@ -122,17 +122,22 @@ $(document).ready(function(){
 		}
 	});
 
+	var isSupportedMimetype = false;
+	var mimetype = $('#mimetype').val();
+
 	if (typeof FileActions !== 'undefined') {
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
 			var mime = videoViewer.mimeTypes[i];
 			OCA.Files.fileActions.register(mime, 'View', OC.PERMISSION_READ, '', videoViewer.onView);
 			OCA.Files.fileActions.setDefault(mime, 'View');
+			if (mime === mimetype) {
+				isSupportedMimetype = true;
+			}
 		}
 	}
 
-	if($('#body-public').length && $('#imgframe').length) {
+	if($('#body-public').length && $('#imgframe').length && isSupportedMimetype) {
 		var videoUrl = $('#downloadURL').val();
-		var mimetype = $('#mimetype').val();
 		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
 	}
 
