@@ -56,6 +56,7 @@
 	height: 30px;
 	opacity: .35;
 	cursor: pointer;
+	z-index: 2;
 }
 
 #box-close:hover {
