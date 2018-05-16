@@ -12,7 +12,7 @@ var videoViewer = {
 			}
 		},
 		videoLibLoaded: false,
-		playerTemplate : '<video id="my_video_1" controls preload="auto" autoplay="true" width="100%" height="100%">' +
+		playerTemplate : '<video id="my_video_1" controls preload="auto" autoplay="true">' +
 		'<source type="%type%" src="%src%" />' +
 		'%tracks%' +
 		'</video>',
