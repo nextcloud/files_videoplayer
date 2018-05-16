@@ -39,20 +39,13 @@
 	right: 10px;
 	width: 30px;
 	height: 30px;
-	opacity: .35;
+	opacity: .35 !important;
 	cursor: pointer;
 	z-index: 2;
 }
 
 #box-close:hover {
-	opacity: .75;
-}
-
-.vjs-sublime-skin.vjs-has-started.vjs-user-inactive.vjs-playing #box-close {
-	opacity: 0;
-	-webkit-transition: opacity 1s cubic-bezier(.455,.03,.515,.955);
-	-moz-transition: opacity 1s cubic-bezier(.455,.03,.515,.955);
-	transition: opacity 1s cubic-bezier(.455,.03,.515,.955);
+	opacity: .75 !important;
 }
 
 #videoplayer button {

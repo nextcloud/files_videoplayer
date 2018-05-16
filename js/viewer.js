@@ -46,8 +46,8 @@ var videoViewer = {
 				success: function(mediaElement, domElement, player) {
 					videoViewer.player = mediaElement;
 					// append close button to video element
-					var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
-					$('#videoplayer').append(closeButton);
+					var closeButton = $('<a class="icon-view-close mejs__control" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
+					$(".mejs__video").append(closeButton);
 					// autoplay
 					videoViewer.player.play();
 					// focus the player to make keyboard shortcuts work
