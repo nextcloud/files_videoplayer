@@ -10,19 +10,19 @@
 
 		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
-	<version>1.3.0</version>
+	<version>1.4.0</version>
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
 	<default_enable/>
 	<documentation>
-		<user>https://github.com/owncloud/files_videoplayer/blob/master/README.md</user>
-		<admin>https://github.com/owncloud/files_videoplayer/blob/master/README.md</admin>
-		<developer>https://github.com/owncloud/files_videoplayer/blob/master/README.md</developer>
+		<user>https://github.com/nextcloud/files_videoplayer/blob/master/README.md</user>
+		<admin>https://github.com/nextcloud/files_videoplayer/blob/master/README.md</admin>
+		<developer>https://github.com/nextcloud/files_videoplayer/blob/master/README.md</developer>
 	</documentation>
-	<website>https://github.com/owncloud/files_videoplayer</website>
-	<bugs>https://github.com/owncloud/files_videoplayer/issues</bugs>
-	<repository type="git">https://github.com/owncloud/files_videoplayer.git</repository>
+	<website>https://github.com/nextcloud/files_videoplayer</website>
+	<bugs>https://github.com/nextcloud/files_videoplayer/issues</bugs>
+	<repository type="git">https://github.com/nextcloud/files_videoplayer.git</repository>
 	<dependencies>
-		<nextcloud min-version="14" max-version="14" />
+		<nextcloud min-version="15" max-version="15" />
 	</dependencies>
 </info>
