@@ -5,10 +5,20 @@ var videoViewer = {
 				return $.when();
 			} else {
 				this.videoJSLoaded = true;
-				var stylePath = OC.filePath('files_videoplayer', 'videojs', 'src/video-js.css');
+				var stylePath = OC.filePath('files_videoplayer', 'js', 'videojs/video-js.css');
 				$('head').append($('<link rel="stylesheet" type="text/css" href="' + stylePath + '"/>'));
-				var scriptPath = OC.filePath('files_videoplayer', 'videojs', 'src/video.js');
-				return $.getScript(scriptPath, function (xhr) {eval(xhr);});
+				var scriptPath = OC.filePath('files_videoplayer', 'js', 'videojs/video.js');
+
+				var deferred = $.Deferred();
+				var script = document.createElement('script');
+				script.src = scriptPath;
+				script.setAttribute('nonce', btoa(OC.requestToken));
+				script.onload = function() {
+					deferred.resolve();
+				};
+				document.head.appendChild(script);
+
+				return deferred;
 			}
 		},
 		videoJSLoaded: false,
