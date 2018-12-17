@@ -147,7 +147,7 @@ $(document).ready(function(){
 	}
 
 	if($('#body-public').length && $('#imgframe').length && isSupportedMimetype) {
-		var videoUrl = $('#downloadURL').val();
+		var videoUrl = window.location + '/download';
 		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
 	}
 
