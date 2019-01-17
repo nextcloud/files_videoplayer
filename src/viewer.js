@@ -20,14 +20,23 @@
  */
 
 import $ from 'jquery';
-import _ from 'underscore';
 
 __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
-const loadVideoJSOnce = _.once(() => {
-	return import(/* webpackChunkName: "videojs" */ 'video.js');
-});
+const loadVideoJSOnce = function() {
+	let alreadyCalled = false;
+	let result;
+
+	return new Promise(function(resolve, reject) {
+		if (!alreadyCalled) {
+			result = import(/* webpackChunkName: "videojs" */ 'video.js');
+			alreadyCalled = true;
+		}
+
+		resolve(result);
+	});
+};
 
 var videoViewer = {
 	UI: {
