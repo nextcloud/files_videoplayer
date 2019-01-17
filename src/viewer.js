@@ -1,34 +1,43 @@
+/*
+ * @copyright 2018 Christoph Wurst <christoph@winzerhof-wurst.at>
+ *
+ * @author 2018 Christoph Wurst <christoph@winzerhof-wurst.at>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import $ from 'jquery';
+import _ from 'underscore';
+
+__webpack_nonce__ = btoa(OC.requestToken)
+__webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
+
+const loadVideoJSOnce = _.once(() => {
+	return import(/* webpackChunkName: "videojs" */ 'video.js');
+});
+
 var videoViewer = {
-	UI : {
-		loadVideoJS: function() {
-			if (this.videoJSLoaded) {
-				return $.when();
-			} else {
-				this.videoJSLoaded = true;
-				var stylePath = OC.filePath('files_videoplayer', 'js', 'videojs/video-js.css');
-				$('head').append($('<link rel="stylesheet" type="text/css" href="' + stylePath + '"/>'));
-				var scriptPath = OC.filePath('files_videoplayer', 'js', 'videojs/video.js');
-
-				var deferred = $.Deferred();
-				var script = document.createElement('script');
-				script.src = scriptPath;
-				script.setAttribute('nonce', btoa(OC.requestToken));
-				script.onload = function() {
-					deferred.resolve();
-				};
-				document.head.appendChild(script);
-
-				return deferred;
-			}
-		},
-		videoJSLoaded: false,
-		playerTemplate : '<video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="'+OC.filePath('files_videoplayer', '', 'img')+'/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
-		'<source type="%type%" src="%src%" />' +
-		'</video>',
-		show : function () {
+	UI: {
+		playerTemplate: '<video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="' + OC.filePath('files_videoplayer', '', 'img') + '/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
+			'<source type="%type%" src="%src%" />' +
+			'</video>',
+		show: function () {
 			// insert HTML
 			var playerView = videoViewer.UI.playerTemplate
-								.replace(/%src%/g, escapeHTML(videoViewer.location));
+				.replace(/%src%/g, escapeHTML(videoViewer.location));
 			if (videoViewer.mime) {
 				playerView = playerView.replace(/%type%/g, escapeHTML(videoViewer.mime));
 			} else {
@@ -52,7 +61,7 @@ var videoViewer = {
 				$(videoViewer.inline).html(wrapper);
 			}
 			// initialize player
-			videojs("my_video_1").ready(function() {
+			videojs("my_video_1").ready(function () {
 				videoViewer.player = this;
 				if (videoViewer.inline === null) {
 					// append close button to video element
@@ -64,18 +73,18 @@ var videoViewer = {
 			});
 
 		},
-		hide : function() {
-			$('#videoplayer_overlay').fadeOut('fast', function() {
+		hide: function () {
+			$('#videoplayer_overlay').fadeOut('fast', function () {
 				$('#videoplayer_overlay').remove();
 			});
 		}
 	},
-	mime : null,
-	file : null,
-	location : null,
-	player : null,
-	inline : null,
-	mimeTypes : [
+	mime: null,
+	file: null,
+	location: null,
+	player: null,
+	inline: null,
+	mimeTypes: [
 		'video/mp4',
 		'video/x-m4v',
 		'video/webm',
@@ -87,7 +96,7 @@ var videoViewer = {
 	mimeTypeAliasses: {
 		'video/x-matroska': 'video/webm' // mkv support for Chrome. webm uses the same container format
 	},
-	onView : function(file, data) {
+	onView: function (file, data) {
 		videoViewer.file = file;
 		videoViewer.dir = data.dir;
 		videoViewer.location = data.fileList.getDownloadUrl(file, videoViewer.dir);
@@ -97,7 +106,7 @@ var videoViewer = {
 		}
 		videoViewer.showPlayer();
 	},
-	onViewInline : function (element, file, mime) {
+	onViewInline: function (element, file, mime) {
 		videoViewer.location = file;
 		videoViewer.mime = mime;
 		if (videoViewer.mimeTypeAliasses.hasOwnProperty(videoViewer.mime)) {
@@ -106,27 +115,27 @@ var videoViewer = {
 		videoViewer.inline = element;
 		videoViewer.showPlayer();
 	},
-	showPlayer : function() {
-		videoViewer.UI.loadVideoJS().then(function() {
+	showPlayer: function () {
+		loadVideoJSOnce().then(() => {
 			videoViewer.UI.show();
 		});
 	},
-	hidePlayer : function() {
+	hidePlayer: function () {
 		if (videoViewer.player !== null && videoViewer.player !== false && videoViewer.inline === null) {
 			videoViewer.player.dispose();
 			videoViewer.player = false;
 			videoViewer.UI.hide();
 		}
 	},
-	log : function(message){
+	log: function (message) {
 		console.log(message);
 	}
 };
 
-$(document).ready(function(){
+$(document).ready(function () {
 
 	// add event to ESC key
-	$(document).keyup(function(e) {
+	$(document).keyup(function (e) {
 		if (e.keyCode === 27) {
 			videoViewer.hidePlayer();
 		}
@@ -146,7 +155,7 @@ $(document).ready(function(){
 		}
 	}
 
-	if($('#body-public').length && $('#imgframe').length && isSupportedMimetype) {
+	if ($('#body-public').length && $('#imgframe').length && isSupportedMimetype) {
 		var videoUrl = window.location + '/download';
 		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
 	}

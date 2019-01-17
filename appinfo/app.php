@@ -16,4 +16,4 @@
 */
 
 OCP\Util::addStyle( 'files_videoplayer', 'style' );
-OCP\Util::addscript( 'files_videoplayer', 'viewer');
+OCP\Util::addscript( 'files_videoplayer', 'main');
