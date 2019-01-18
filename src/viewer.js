@@ -20,7 +20,6 @@
  */
 
 import $ from 'jquery';
-import _ from 'underscore';
 
 __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
