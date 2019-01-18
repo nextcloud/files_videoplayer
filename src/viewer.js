@@ -26,12 +26,15 @@ __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
 const loadVideoJSOnce = _.once(() => {
+	import('!style-loader!css-loader!video.js/dist/video-js.css')
 	return import(/* webpackChunkName: "videojs" */ 'video.js');
 });
 
+var videojs = null;
+
 var videoViewer = {
 	UI: {
-		playerTemplate: '<video id="my_video_1" class="video-js vjs-sublime-skin" controls preload="auto" width="100%" height="100%" poster="' + OC.filePath('files_videoplayer', '', 'img') + '/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
+		playerTemplate: '<video id="my_video_1" class="video-js vjs-fill vjs-big-play-centered" controls preload="auto" width="100%" height="100%" poster="' + OC.filePath('files_videoplayer', '', 'img') + '/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
 			'<source type="%type%" src="%src%" />' +
 			'</video>',
 		show: function () {
@@ -61,7 +64,9 @@ var videoViewer = {
 				$(videoViewer.inline).html(wrapper);
 			}
 			// initialize player
-			videojs("my_video_1").ready(function () {
+			videojs("my_video_1", {
+				fill: true,
+			}).ready(function () {
 				videoViewer.player = this;
 				if (videoViewer.inline === null) {
 					// append close button to video element
@@ -116,7 +121,8 @@ var videoViewer = {
 		videoViewer.showPlayer();
 	},
 	showPlayer: function () {
-		loadVideoJSOnce().then(() => {
+		loadVideoJSOnce().then((_videojs) => {
+			videojs = _videojs.default;
 			videoViewer.UI.show();
 		});
 	},
