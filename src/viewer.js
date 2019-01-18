@@ -25,11 +25,6 @@ import _ from 'underscore';
 __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
-const loadVideoJSOnce = _.once(() => {
-	import(/* webpackChunkName: "videojs" */'!style-loader!css-loader!video.js/dist/video-js.css')
-	return import(/* webpackChunkName: "videojs" */ 'video.js');
-});
-
 var videojs = null;
 
 var videoViewer = {
@@ -121,9 +116,11 @@ var videoViewer = {
 		videoViewer.showPlayer();
 	},
 	showPlayer: function () {
-		loadVideoJSOnce().then((_videojs) => {
+		import(/* webpackChunkName: "videojs" */ 'video.js').then((_videojs) => {
 			videojs = _videojs.default;
-			videoViewer.UI.show();
+			import(/* webpackChunkName: "videojs" */'!style-loader!css-loader!video.js/dist/video-js.css').then(() => {
+				videoViewer.UI.show();
+			});
 		});
 	},
 	hidePlayer: function () {
