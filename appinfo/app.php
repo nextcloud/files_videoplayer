@@ -17,3 +17,9 @@
 
 OCP\Util::addStyle( 'files_videoplayer', 'style' );
 OCP\Util::addscript( 'files_videoplayer', 'main');
+
+$csp = new \OCP\AppFramework\Http\ContentSecurityPolicy();
+$csp->addAllowedWorkerSrcDomain('\'self\'');
+$csp->addAllowedWorkerSrcDomain('blob:');
+$cspManager = \OC::$server->query(\OCP\Security\IContentSecurityPolicyManager::class);
+$cspManager->addDefaultPolicy($csp);
