@@ -26,7 +26,7 @@ __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
 const loadVideoJSOnce = _.once(() => {
-	import('!style-loader!css-loader!video.js/dist/video-js.css')
+	import(/* webpackChunkName: "videojs" */'!style-loader!css-loader!video.js/dist/video-js.css')
 	return import(/* webpackChunkName: "videojs" */ 'video.js');
 });
 
