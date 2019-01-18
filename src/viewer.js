@@ -69,7 +69,9 @@ var videoViewer = {
 					$("#my_video_1").append(closeButton);
 				}
 				// autoplay
-				videoViewer.player.play();
+				if ($('#body-public').length === 0) {
+					videoViewer.player.play();
+				}
 			});
 
 		},
