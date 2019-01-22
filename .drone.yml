@@ -19,6 +19,19 @@ pipeline:
     when:
       matrix:
         TESTS: signed-off-check
+  vue-build:
+    image: nextcloudci/jsunit:jsunit-5
+    commands:
+      - rm js/*
+      - npm install
+      - npm run build
+      - git status
+      - bash -c "[[ ! `git status --porcelain` ]] || ( echo 'Uncommited changes in vue build' && exit 1 )"
+    when:
+      matrix:
+        TESTS: vue-build
+
 matrix:
   include:
     - TESTS: signed-off-check
+    - TESTS: vue-build
