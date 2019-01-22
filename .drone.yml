@@ -20,3 +20,5 @@ pipeline:
 matrix:
   include:
     - TESTS: vue-build
+
+branches: [ master, stable* ]
