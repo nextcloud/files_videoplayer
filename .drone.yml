@@ -20,8 +20,9 @@ pipeline:
       matrix:
         TESTS: signed-off-check
   vue-build:
-    image: nextcloudci/jsunit:jsunit-5
+    image: node:lts-alpine
     commands:
+      - apk add git bash
       - rm js/*
       - npm install
       - npm run build
