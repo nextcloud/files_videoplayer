@@ -5,7 +5,7 @@ clone:
 
 pipeline:
   vue-build:
-    image: nextcloudci/node:node-1
+    image: nextcloudci/node:node-4
     commands:
       - find js/ -type f -delete
       - npm install
