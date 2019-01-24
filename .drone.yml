@@ -5,9 +5,8 @@ clone:
 
 pipeline:
   vue-build:
-    image: node:lts-alpine
+    image: nextcloudci/node:node-1
     commands:
-      - apk add git bash
       - find js/ -type f -delete
       - npm install
       - npm run build
