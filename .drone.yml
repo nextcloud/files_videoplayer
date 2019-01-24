@@ -4,21 +4,20 @@ clone:
     depth: 1
 
 pipeline:
-  signed-off-check:
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
-      - APP_NAME=files_videoplayer
-      - CORE_BRANCH=master
-      - DB=sqlite
+  vue-build:
+    image: nextcloudci/node:node-4
     commands:
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server
-      - php ./build/signed-off-checker.php
-    secrets: [ github_token ]
+      - find js/ -type f -delete
+      - npm install
+      - npm run build
+      - git status
+      - bash -c "[[ ! \"`git status --porcelain js/`\" ]] || ( echo 'Uncommited changes in vue build' && exit 1 )"
     when:
       matrix:
-        TESTS: signed-off-check
+        TESTS: vue-build
+
 matrix:
   include:
-    - TESTS: signed-off-check
+    - TESTS: vue-build
+
+branches: [ master, stable* ]
