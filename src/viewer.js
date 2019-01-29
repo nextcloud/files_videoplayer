@@ -119,7 +119,10 @@ var videoViewer = {
 	showPlayer: function () {
 		import(/* webpackChunkName: "videojs" */ 'video.js').then((_videojs) => {
 			videojs = _videojs.default;
-			import(/* webpackChunkName: "videojs" */'!style-loader!css-loader!video.js/dist/video-js.css').then(() => {
+			Promise.all([
+				import(/* webpackChunkName: "videojs" */ '../css/style.css'),
+				import(/* webpackChunkName: "videojs" */'!style-loader!css-loader!video.js/dist/video-js.css')
+			]).then(() => {
 				videoViewer.UI.show();
 			});
 		});
