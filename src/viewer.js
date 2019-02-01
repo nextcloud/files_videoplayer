@@ -68,7 +68,7 @@ var videoViewer = {
 					$("#my_video_1").append(closeButton);
 				}
 				// autoplay
-				if ($('#body-public').length === 0) {
+				if (document.getElementById('body-public') === null) {
 					videoViewer.player.play();
 				}
 			});
@@ -139,17 +139,15 @@ var videoViewer = {
 	}
 };
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
 
 	// add event to ESC key
-	$(document).keyup(function (e) {
-		if (e.keyCode === 27) {
+	document.addEventListener('keyup', function(e) {
+		if ((e.key  !== undefined && e.key === 'Escape') ||
+			(e.keyCode !== undefined && e.keyCode === 27)) {
 			videoViewer.hidePlayer();
 		}
 	});
-
-	var isSupportedMimetype = false;
-	var mimetype = $('#mimetype').val();
 
 	if (typeof FileActions !== 'undefined') {
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
@@ -162,9 +160,16 @@ $(document).ready(function () {
 		}
 	}
 
-	if ($('#body-public').length && $('#imgframe').length && isSupportedMimetype) {
-		var videoUrl = window.location + '/download';
-		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
+	// Public page magic
+	if (document.getElementById('body-public') && document.getElementById('imgframe')) {
+		var mimetype = document.getElementById('mimetype').value;
+		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
+			if (videoViewer.mimeTypes[i] === mimetype) {
+				var videoUrl = window.location + '/download';
+				videoViewer.onViewInline(document.getElementById('imgframe'), videoUrl, mimetype);
+				break;
+			}
+		}
 	}
 
 });
