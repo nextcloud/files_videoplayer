@@ -64,8 +64,14 @@ var videoViewer = {
 				videoViewer.player = this;
 				if (videoViewer.inline === null) {
 					// append close button to video element
-					var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
-					$("#my_video_1").append(closeButton);
+					var closeButton = document.createElement('a');
+					closeButton.className = 'icon-view-close';
+					closeButton.id = 'box-close';
+					closeButton.href = '#';
+					closeButton.addEventListener('click', function () {
+						videoViewer.hidePlayer();
+					});
+					document.getElementById('my_video_1').appendChild(closeButton);
 				}
 				// autoplay
 				if (document.getElementById('body-public') === null) {
