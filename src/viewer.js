@@ -41,17 +41,37 @@ var videoViewer = {
 				playerView = playerView.replace(/type="%type%"/g, '');
 			}
 			if (videoViewer.inline === null) {
-				var overlay = $('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>');
-				overlay.appendTo('body');
+				var overlay = document.createElement('div');
+				overlay.id = 'videoplayer_overlay';
+				overlay.style.display = 'none';
+
+				{
+					var outer_container = document.createElement('div');
+					outer_container.id = 'videoplayer_outer_container';
+
+					var container = document.createElement('div');
+					container.id = 'videoplayer_container';
+
+					var player = document.createElement('div');
+					player.id = 'videoplayer';
+
+					container.appendChild(player);
+					outer_container.appendChild(container);
+					overlay.appendChild(outer_container);
+				}
+
+				document.body.appendChild(overlay);
 				$(playerView).prependTo('#videoplayer');
 				// close when clicking on the overlay
-				overlay.on("click", function (e) {
+				overlay.addEventListener('click', function(e) {
 					if (e.target === this) {
 						videoViewer.hidePlayer();
 					}
 				});
+
 				// show elements
-				overlay.fadeIn('fast');
+				overlay.style.display = 'block';
+				//overlay.fadeIn('fast'); TODO: convert to fadein!
 			} else {
 				var wrapper = $('<div id="videoplayer_view"></div>');
 				wrapper.append(playerView);
