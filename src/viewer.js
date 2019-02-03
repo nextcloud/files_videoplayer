@@ -51,7 +51,6 @@ var videoViewer = {
 			if (videoViewer.inline === null) {
 				var overlay = document.createElement('div');
 				overlay.id = 'videoplayer_overlay';
-				overlay.style.display = 'none';
 
 				var outer_container = document.createElement('div');
 				outer_container.id = 'videoplayer_outer_container';
@@ -76,9 +75,7 @@ var videoViewer = {
 					}
 				});
 
-				// show elements
-				overlay.style.display = 'block';
-				//overlay.fadeIn('fast'); TODO: convert to fadein!
+				setTimeout(() => { overlay.className = 'show'; }, 0);
 			} else {
 				var wrapper = document.createElement('div');
 				wrapper.id = 'videoplayer_view';
@@ -109,14 +106,11 @@ var videoViewer = {
 
 		},
 		hide: function () {
-			/* TODO: it was, so put the fade back in
-			$('#videoplayer_overlay').fadeOut('fast', function () {
-				$('#videoplayer_overlay').remove();
-			});
-			*/
 			var overlay = document.getElementById('videoplayer_overlay');
-			overlay.style.display = 'none';
-			overlay.parentElement.removeChild(overlay);
+			overlay.className = '';
+			setTimeout(() => {
+				overlay.parentElement.removeChild(overlay);
+			}, 500);
 		}
 	},
 	mime: null,

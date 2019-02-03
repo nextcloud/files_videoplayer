@@ -11,6 +11,12 @@
 	background-color: #4c4c4c;
 	background-color: rgba(0, 0, 0, .7);
 	z-index: 3000;
+	opacity: 0;
+	transition: opacity 250ms ease-in;
+}
+
+#videoplayer_overlay.show {
+	opacity: 1;
 }
 
 #videoplayer_outer_container {
