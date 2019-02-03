@@ -4,8 +4,6 @@
   "description": "A responsive video player for Nextcloud using a skinned version of Video.js.",
   "private": true,
   "dependencies": {
-    "jquery": "2.1.x",
-    "underscore": "^1.9.1",
     "video.js": "^7.4.1"
   },
   "devDependencies": {
