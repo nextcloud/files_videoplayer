@@ -31,7 +31,7 @@ var videoViewer = {
 		show: function () {
 
 			var source = document.createElement('source');
-			source.src = escapeHTML(videoViewer.location);
+			source.src = escapeHTML(videoViewer.location).replace('&amp;', '&');
 
 			if (videoViewer.mime) {
 				source.type = escapeHTML(videoViewer.mime);
