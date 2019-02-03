@@ -111,9 +111,14 @@ var videoViewer = {
 
 		},
 		hide: function () {
+			/* TODO: it was, so put the fade back in
 			$('#videoplayer_overlay').fadeOut('fast', function () {
 				$('#videoplayer_overlay').remove();
 			});
+			*/
+			var overlay = document.getElementById('videoplayer_overlay');
+			overlay.style.display = 'none';
+			overlay.parentElement.removeChild(overlay);
 		}
 	},
 	mime: null,
