@@ -55,23 +55,22 @@ var videoViewer = {
 				overlay.id = 'videoplayer_overlay';
 				overlay.style.display = 'none';
 
-				{
-					var outer_container = document.createElement('div');
-					outer_container.id = 'videoplayer_outer_container';
+				var outer_container = document.createElement('div');
+				outer_container.id = 'videoplayer_outer_container';
 
-					var container = document.createElement('div');
-					container.id = 'videoplayer_container';
+				var container = document.createElement('div');
+				container.id = 'videoplayer_container';
 
-					var player = document.createElement('div');
-					player.id = 'videoplayer';
+				var player = document.createElement('div');
+				player.id = 'videoplayer';
 
-					container.appendChild(player);
-					outer_container.appendChild(container);
-					overlay.appendChild(outer_container);
-				}
+				container.appendChild(player);
+				outer_container.appendChild(container);
+				overlay.appendChild(outer_container);
 
+				player.appendChild(playerView);
 				document.body.appendChild(overlay);
-				$(playerView).prependTo('#videoplayer');
+
 				// close when clicking on the overlay
 				overlay.addEventListener('click', function(e) {
 					if (e.target === this) {
@@ -83,9 +82,10 @@ var videoViewer = {
 				overlay.style.display = 'block';
 				//overlay.fadeIn('fast'); TODO: convert to fadein!
 			} else {
-				var wrapper = $('<div id="videoplayer_view"></div>');
-				wrapper.append(playerView);
-				$(videoViewer.inline).html(wrapper);
+				var wrapper = document.createElement('div');
+				wrapper.id = 'videoplayer_view';
+				wrapper.appendChild(playerView);
+				videoViewer.inline.appendChild(wrapper);
 			}
 			// initialize player
 			videojs("my_video_1", {
