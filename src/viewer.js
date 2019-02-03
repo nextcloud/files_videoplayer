@@ -28,18 +28,28 @@ var videojs = null;
 
 var videoViewer = {
 	UI: {
-		playerTemplate: '<video id="my_video_1" class="video-js vjs-fill vjs-big-play-centered" controls preload="auto" width="100%" height="100%" poster="' + OC.filePath('files_videoplayer', '', 'img') + '/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
-			'<source type="%type%" src="%src%" />' +
-			'</video>',
 		show: function () {
-			// insert HTML
-			var playerView = videoViewer.UI.playerTemplate
-				.replace(/%src%/g, escapeHTML(videoViewer.location));
+
+			var source = document.createElement('source');
+			source.src = escapeHTML(videoViewer.location);
+
 			if (videoViewer.mime) {
-				playerView = playerView.replace(/%type%/g, escapeHTML(videoViewer.mime));
-			} else {
-				playerView = playerView.replace(/type="%type%"/g, '');
+				source.type = escapeHTML(videoViewer.mime);
 			}
+
+			var playerView = document.createElement('video');
+			playerView.id = 'my_video_1';
+			playerView.classList.add('video-js');
+			playerView.classList.add('vjs-fill');
+			playerView.classList.add('vjs-big-play-centered');
+			playerView.controls = true;
+			playerView.preload = "auto";
+			playerView.width = "100%";
+			playerView.height = "100%";
+			playerView.poster = OC.filePath('files_videoplayer', '', 'img') + '/poster.png';
+			playerView.setAttribute('data-setup', '{"techOrder": ["html5"]}');
+			playerView.appendChild(source);
+
 			if (videoViewer.inline === null) {
 				var overlay = document.createElement('div');
 				overlay.id = 'videoplayer_overlay';
