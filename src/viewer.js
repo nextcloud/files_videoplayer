@@ -19,8 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import $ from 'jquery';
-
 __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
@@ -28,34 +26,61 @@ var videojs = null;
 
 var videoViewer = {
 	UI: {
-		playerTemplate: '<video id="my_video_1" class="video-js vjs-fill vjs-big-play-centered" controls preload="auto" width="100%" height="100%" poster="' + OC.filePath('files_videoplayer', '', 'img') + '/poster.png" data-setup=\'{"techOrder": ["html5"]}\'>' +
-			'<source type="%type%" src="%src%" />' +
-			'</video>',
 		show: function () {
-			// insert HTML
-			var playerView = videoViewer.UI.playerTemplate
-				.replace(/%src%/g, escapeHTML(videoViewer.location));
+
+			var source = document.createElement('source');
+			source.src = escapeHTML(videoViewer.location).replace('&amp;', '&');
+
 			if (videoViewer.mime) {
-				playerView = playerView.replace(/%type%/g, escapeHTML(videoViewer.mime));
-			} else {
-				playerView = playerView.replace(/type="%type%"/g, '');
+				source.type = escapeHTML(videoViewer.mime);
 			}
+
+			var playerView = document.createElement('video');
+			playerView.id = 'my_video_1';
+			playerView.classList.add('video-js');
+			playerView.classList.add('vjs-fill');
+			playerView.classList.add('vjs-big-play-centered');
+			playerView.controls = true;
+			playerView.preload = "auto";
+			playerView.width = "100%";
+			playerView.height = "100%";
+			playerView.poster = OC.filePath('files_videoplayer', '', 'img') + '/poster.png';
+			playerView.setAttribute('data-setup', '{"techOrder": ["html5"]}');
+			playerView.appendChild(source);
+
 			if (videoViewer.inline === null) {
-				var overlay = $('<div id="videoplayer_overlay" style="display:none;"><div id="videoplayer_outer_container"><div id="videoplayer_container"><div id="videoplayer"></div></div></div></div>');
-				overlay.appendTo('body');
-				$(playerView).prependTo('#videoplayer');
+				var overlay = document.createElement('div');
+				overlay.id = 'videoplayer_overlay';
+
+				var outer_container = document.createElement('div');
+				outer_container.id = 'videoplayer_outer_container';
+
+				var container = document.createElement('div');
+				container.id = 'videoplayer_container';
+
+				var player = document.createElement('div');
+				player.id = 'videoplayer';
+
+				container.appendChild(player);
+				outer_container.appendChild(container);
+				overlay.appendChild(outer_container);
+
+				player.appendChild(playerView);
+				document.body.appendChild(overlay);
+
 				// close when clicking on the overlay
-				overlay.on("click", function (e) {
+				overlay.addEventListener('click', function(e) {
 					if (e.target === this) {
 						videoViewer.hidePlayer();
 					}
 				});
-				// show elements
-				overlay.fadeIn('fast');
+
+				setTimeout(() => { overlay.className = 'show'; }, 0);
 			} else {
-				var wrapper = $('<div id="videoplayer_view"></div>');
-				wrapper.append(playerView);
-				$(videoViewer.inline).html(wrapper);
+				var wrapper = document.createElement('div');
+				wrapper.id = 'videoplayer_view';
+				wrapper.appendChild(playerView);
+				videoViewer.inline.appendChild(wrapper);
 			}
 			// initialize player
 			videojs("my_video_1", {
@@ -64,20 +89,28 @@ var videoViewer = {
 				videoViewer.player = this;
 				if (videoViewer.inline === null) {
 					// append close button to video element
-					var closeButton = $('<a class="icon-view-close" id="box-close" href="#"></a>').click(videoViewer.hidePlayer);
-					$("#my_video_1").append(closeButton);
+					var closeButton = document.createElement('a');
+					closeButton.className = 'icon-view-close';
+					closeButton.id = 'box-close';
+					closeButton.href = '#';
+					closeButton.addEventListener('click', function () {
+						videoViewer.hidePlayer();
+					});
+					document.getElementById('my_video_1').appendChild(closeButton);
 				}
 				// autoplay
-				if ($('#body-public').length === 0) {
+				if (document.getElementById('body-public') === null) {
 					videoViewer.player.play();
 				}
 			});
 
 		},
 		hide: function () {
-			$('#videoplayer_overlay').fadeOut('fast', function () {
-				$('#videoplayer_overlay').remove();
-			});
+			var overlay = document.getElementById('videoplayer_overlay');
+			overlay.className = '';
+			setTimeout(() => {
+				overlay.parentElement.removeChild(overlay);
+			}, 500);
 		}
 	},
 	mime: null,
@@ -139,17 +172,15 @@ var videoViewer = {
 	}
 };
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
 
 	// add event to ESC key
-	$(document).keyup(function (e) {
-		if (e.keyCode === 27) {
+	document.addEventListener('keyup', function(e) {
+		if ((e.key  !== undefined && e.key === 'Escape') ||
+			(e.keyCode !== undefined && e.keyCode === 27)) {
 			videoViewer.hidePlayer();
 		}
 	});
-
-	var isSupportedMimetype = false;
-	var mimetype = $('#mimetype').val();
 
 	if (typeof FileActions !== 'undefined') {
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
@@ -162,9 +193,16 @@ $(document).ready(function () {
 		}
 	}
 
-	if ($('#body-public').length && $('#imgframe').length && isSupportedMimetype) {
-		var videoUrl = window.location + '/download';
-		videoViewer.onViewInline($('#imgframe'), videoUrl, mimetype);
+	// Public page magic
+	if (document.getElementById('body-public') && document.getElementById('imgframe')) {
+		var mimetype = document.getElementById('mimetype').value;
+		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
+			if (videoViewer.mimeTypes[i] === mimetype) {
+				var videoUrl = window.location + '/download';
+				videoViewer.onViewInline(document.getElementById('imgframe'), videoUrl, mimetype);
+				break;
+			}
+		}
 	}
 
 });
