@@ -102,6 +102,12 @@ var videoViewer = {
 				if (document.getElementById('body-public') === null) {
 					videoViewer.player.play();
 				}
+				this.hotkeys({
+					volumeStep: 0.1,
+					seekStep: 5,
+					enableModifiersForNumbers: false
+				  });
+				
 			});
 
 		},
@@ -150,6 +156,7 @@ var videoViewer = {
 		videoViewer.showPlayer();
 	},
 	showPlayer: function () {
+		import(/* webpackChunkName: "videojs-hotkeys" */ 'videojs-hotkeys')
 		import(/* webpackChunkName: "videojs" */ 'video.js').then((_videojs) => {
 			videojs = _videojs.default;
 			Promise.all([
