@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		var mimetype = document.getElementById('mimetype').value;
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
 			if (videoViewer.mimeTypes[i] === mimetype) {
-				var videoUrl = window.location + '/download';
+				var videoUrl = window.location.href.split('?')[0] + '/download';
 				videoViewer.onViewInline(document.getElementById('imgframe'), videoUrl, mimetype);
 				break;
 			}
