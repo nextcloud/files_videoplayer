@@ -10,7 +10,7 @@
 
 		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
-	<version>1.4.0</version>
+	<version>1.4.1</version>
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
 	<default_enable/>
