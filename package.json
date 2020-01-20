@@ -1,6 +1,6 @@
 {
   "name": "files_videoplayer",
-  "version": "0.1.0",
+  "version": "1.8.0",
   "description": "A responsive video player for Nextcloud using a skinned version of Video.js.",
   "private": true,
   "dependencies": {
