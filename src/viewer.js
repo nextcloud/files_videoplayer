@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 
-	if (typeof FileActions !== 'undefined' && !OCA.Viewer) {
+	if (OCA && OCA.Files && OCA.Files.fileActions && !OCA.Viewer) {
 		for (var i = 0; i < videoViewer.mimeTypes.length; ++i) {
 			var mime = videoViewer.mimeTypes[i];
 			OCA.Files.fileActions.register(mime, 'View', OC.PERMISSION_READ, '', videoViewer.onView);
