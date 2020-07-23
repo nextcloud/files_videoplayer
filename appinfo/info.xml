@@ -13,6 +13,7 @@
 	<version>1.9.0</version>
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
+	<namespace>FilesVideoPlayer</namespace>
 	<default_enable/>
 	<documentation>
 		<user>https://github.com/nextcloud/files_videoplayer/blob/master/README.md</user>
