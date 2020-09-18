@@ -10,7 +10,7 @@
 
 		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
-	<version>1.9.0</version>
+	<version>1.10.0</version>
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
 	<namespace>FilesVideoPlayer</namespace>
@@ -24,6 +24,6 @@
 	<bugs>https://github.com/nextcloud/files_videoplayer/issues</bugs>
 	<repository type="git">https://github.com/nextcloud/files_videoplayer.git</repository>
 	<dependencies>
-		<nextcloud min-version="20" max-version="20" />
+		<nextcloud min-version="21" max-version="21" />
 	</dependencies>
 </info>
