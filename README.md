@@ -1,3 +1,7 @@
+:warning: files_videoplayer is deprecated and will soon be pulled out of nextcloud.
+For any bugs and features, please head over to https://github.com/nextcloud/viewer/.
+
+
 # Video player
 ![](screenshot.jpg)
 
