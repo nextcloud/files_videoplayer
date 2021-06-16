@@ -25,6 +25,10 @@
     "build": "webpack --progress --config src/webpack.prod.js",
     "watch": "webpack --progress --watch --config src/webpack.dev.js"
   },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
+  },
   "browserslist": [
     "last 2 versions",
     "ie >= 11"
