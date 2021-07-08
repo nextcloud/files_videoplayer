@@ -147,8 +147,8 @@ video-js.vjs-ended .vjs-big-play-button,.video-js.vjs-paused .vjs-big-play-butto
 }
 
 .video-js .vjs-control-bar {
-	background-color: rgba(0,0,0,0) !important;
-	color: #ffffff;
+	background-color: #000000 !important;
+	color: #eeeeee;
 	font-size: 18px
 }
 
