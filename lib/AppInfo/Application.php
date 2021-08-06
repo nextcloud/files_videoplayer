@@ -30,7 +30,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		Util::addScript('files_videoplayer', 'main');
+		Util::addScript(self::APP_ID, 'files_videoplayer-main');
 
 		$csp = new ContentSecurityPolicy();
 		$csp->addAllowedWorkerSrcDomain('\'self\'');
