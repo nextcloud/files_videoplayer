@@ -11,13 +11,15 @@ declare(strict_types=1);
 
 namespace OCA\FilesVideoPlayer\AppInfo;
 
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\Files_Sharing\Event\BeforeTemplateRenderedEvent;
+use OCA\FilesVideoPlayer\Listener\BeforeTemplateRenderedListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\Security\IContentSecurityPolicyManager;
-use OCP\Util;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'files_videoplayer';
@@ -27,11 +29,10 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
+		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
-		Util::addScript(self::APP_ID, 'files_videoplayer-main');
-
 		$csp = new ContentSecurityPolicy();
 		$csp->addAllowedWorkerSrcDomain('\'self\'');
 		$csp->addAllowedWorkerSrcDomain('blob:');
