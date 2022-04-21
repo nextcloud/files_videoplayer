@@ -238,3 +238,14 @@ video-js.vjs-ended .vjs-big-play-button,.video-js.vjs-paused .vjs-big-play-butto
 	min-width: 300px;
 	max-width: 100% !important;
 }
+
+/** video thumbanil black border removed **/
+
+#my_video_1_html5_api {
+	background-color: #FFFF !important;
+}
+
+.video-js,
+.vjs-poster {
+	background: none !important;
+}
