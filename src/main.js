@@ -20,23 +20,19 @@
  */
 
 import escapeHTML from 'escape-html'
+import { loadState } from '@nextcloud/initial-state'
 
 __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
 let videojs = null
 
+const { limit } = loadState('files_downloadlimit', 'download_limit', { limit: -1 })
+const hasDownloadLimit = limit !== -1
+
 const videoViewer = {
 	UI: {
 		show() {
-
-			const source = document.createElement('source')
-			source.src = escapeHTML(videoViewer.location).replace('&amp;', '&')
-
-			if (videoViewer.mime) {
-				source.type = escapeHTML(videoViewer.mime)
-			}
-
 			const playerView = document.createElement('video')
 			playerView.id = 'my_video_1'
 			playerView.classList.add('video-js')
@@ -48,7 +44,17 @@ const videoViewer = {
 			playerView.height = '100%'
 			playerView.poster = OC.filePath('files_videoplayer', '', 'img') + '/poster.png'
 			playerView.setAttribute('data-setup', '{"techOrder": ["html5"]}')
-			playerView.appendChild(source)
+
+			if (!hasDownloadLimit) {
+				const source = document.createElement('source')
+				source.src = escapeHTML(videoViewer.location).replace('&amp;', '&')
+
+				if (videoViewer.mime) {
+					source.type = escapeHTML(videoViewer.mime)
+				}
+
+				playerView.appendChild(source)
+			}
 
 			if (videoViewer.inline === null) {
 				const overlay = document.createElement('div')
