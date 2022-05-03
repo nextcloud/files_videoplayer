@@ -4,6 +4,7 @@
   "description": "A responsive video player for Nextcloud using a skinned version of Video.js.",
   "private": true,
   "dependencies": {
+    "@nextcloud/initial-state": "^1.2.1",
     "escape-html": "^1.0.3",
     "video.js": "^7.4.1"
   },
