@@ -6,7 +6,7 @@
   "dependencies": {
     "@nextcloud/initial-state": "^1.2.1",
     "escape-html": "^1.0.3",
-    "video.js": "^7.4.1"
+    "video.js": "^7.14.3"
   },
   "devDependencies": {
     "@nextcloud/babel-config": "^1.0.0",
