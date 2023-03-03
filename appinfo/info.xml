@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>files_videoplayer</id>
 	<name>Video player</name>
 	<description>A responsive video player using a skinned version of Video.js
@@ -10,7 +10,7 @@
 
 		Skin: https://github.com/cabin/videojs-sublime-skin
 	</description>
-	<version>1.15.0</version>
+	<version>1.16.0</version>
 	<licence>MIT</licence>
 	<author>Björn Korella</author>
 	<namespace>FilesVideoPlayer</namespace>
@@ -24,6 +24,6 @@
 	<bugs>https://github.com/nextcloud/files_videoplayer/issues</bugs>
 	<repository type="git">https://github.com/nextcloud/files_videoplayer.git</repository>
 	<dependencies>
-		<nextcloud min-version="26" max-version="26" />
+		<nextcloud min-version="27" max-version="27" />
 	</dependencies>
 </info>
